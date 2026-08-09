@@ -46,7 +46,8 @@ Use `bin/python` instead of `Scripts/python` on Linux and macOS.
 
 `scripts/verify_frozen_results.py`, `scripts/build_paper_objects.py` and the
 test suite compare committed bytes and structural invariants. They are
-environment-independent and need only `pandas` and `pypdf`.
+environment-independent; `requirements-verify.txt` pins the two packages they
+need, and continuous integration installs only that.
 
 ## Threading
 
