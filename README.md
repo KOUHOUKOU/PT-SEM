@@ -5,6 +5,8 @@ Poisson-Thinning Structural Equation Models*.
 
 Manuscript of record: `PT_SEM_jmlr (51).pdf`, SHA-256 `7f485b4e…`.
 
+Repository: <https://github.com/KOUHOUKOU/PT-SEM>
+
 ## What this repository delivers
 
 `outputs/` contains the manuscript's objects and nothing else:
