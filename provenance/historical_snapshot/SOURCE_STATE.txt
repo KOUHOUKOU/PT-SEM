@@ -1,5 +1,5 @@
 Capture timestamp: 2026-07-21T23:17:47.6385753+09:00
-Project root: C:\Users\ROG\Desktop\BEST_PTSEM
+Project root: the recovered source tree
 
 Git repository status: NOT A GIT REPOSITORY
 Git commit hash: N/A

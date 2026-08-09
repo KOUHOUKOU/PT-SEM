@@ -17,7 +17,7 @@ The download date was verified from the local KaggleHub cache completion marker
 and file timestamps at:
 
 ```text
-C:\Users\ROG\.cache\kagglehub\datasets\brains14482\nba-playbyplay-and-shotdetails-data-19962021\versions\8
+<user home>\.cache\kagglehub\datasets\brains14482\nba-playbyplay-and-shotdetails-data-19962021\versions\8
 ```
 
 The empirical study uses `nbastats_2015.csv` through `nbastats_2020.csv` from

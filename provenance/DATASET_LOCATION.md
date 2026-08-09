@@ -29,7 +29,7 @@ python -c "import kagglehub; print(kagglehub.dataset_download('brains14482/nba-p
 Local cache path:
 
 ```text
-C:\Users\ROG\.cache\kagglehub\datasets\brains14482\nba-playbyplay-and-shotdetails-data-19962021\versions\8
+<kagglehub cache>\datasets\brains14482\nba-playbyplay-and-shotdetails-data-19962021\versions\8
 ```
 
 For the FOUL/FTA/FTM quarter-level replication, start with these NBA.com

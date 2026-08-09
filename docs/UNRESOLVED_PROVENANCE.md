@@ -57,3 +57,14 @@ never downloaded and no longer exist. It is not a gap in this repository: the
 figure now shipped was recomputed locally under the environment that produces
 Figures 2–4, and both its inputs and its outputs are committed here. The earlier
 server figure is superseded and is not part of the manuscript.
+
+## Absolute paths inside frozen run records
+
+`data/nba/graph_json/*.json`, `results/*/metadata/formal_run_plan.json` and the
+convolution audit report record the absolute paths of the machine that produced
+them. These files are shipped as written by the runs, so the paths were not
+rewritten: editing them would change their digests and break the correspondence
+with `manifests/SHA256SUMS.csv`. The reproducible identity in those records is
+the accompanying SHA-256 of the numerical core, not its path, and
+`scripts/verify_frozen_results.py --section cores` checks the digest rather than
+the location. Prose documentation carries no absolute paths.

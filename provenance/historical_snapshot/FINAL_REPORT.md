@@ -2,7 +2,7 @@
 
 ## Protection and source state
 
-- Project root: `C:\Users\ROG\Desktop\BEST_PTSEM`.
+- Project root: `the recovered source tree`.
 - The project root and its parents contain no Git repository metadata. Commit,
   branch, status, and diff are therefore unavailable and are recorded as such
   in `SOURCE_STATE.txt`; `git_diff.patch` explicitly states N/A.
