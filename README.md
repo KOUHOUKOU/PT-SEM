@@ -27,16 +27,19 @@ produce no longer match the figure numbers a reader sees.
 `docs/PAPER_RESULT_MANIFEST.md` is that mapping, and `outputs/` already applies
 it.
 
-## Check it in one command
+## Three ways to use this, in increasing depth
 
-No scientific environment needed; `pandas` and `pypdf` suffice.
+### 1. Confirm the shipped objects are the paper's (30 seconds)
 
 ```bash
+git clone https://github.com/KOUHOUKOU/PT-SEM.git
+cd PT-SEM
+pip install -r requirements-verify.txt
 python scripts/build_paper_objects.py
 ```
 
-It compares every object with what the manuscript actually contains and prints
-one line per object:
+Two packages, no scientific environment. It compares every delivered object
+with the content stream embedded in the manuscript and prints one line each:
 
 ```
 Figure 1   figure1_all_poisson.pdf   MATCH   514a0d4273dd807d
@@ -44,29 +47,57 @@ Figure 1   figure1_all_poisson.pdf   MATCH   514a0d4273dd807d
 ALL PAPER OBJECTS REPRODUCED
 ```
 
-Integrity of the shipped artifacts:
+A `MATCH` means the file in `outputs/` is byte-identical to what the paper
+prints. The same run writes `outputs/REPRODUCTION_REPORT.md`. Integrity of the
+committed artifacts:
 
 ```bash
 python scripts/verify_frozen_results.py
 python -m unittest discover -s tests
 ```
 
-## Reproducing the results
+### 2. Redraw the figures from the committed results (minutes)
 
-Two pinned environments are required and must not be merged; they differ only
-in NumPy. See `docs/ENVIRONMENT.md`.
+This regenerates Figures 1-4 rather than checking a shipped copy, so it
+demonstrates that the committed data really produces the published figures.
 
-| Line | Environment | Guide |
+```bash
+python -m venv .venv-simulation
+.venv-simulation/Scripts/python -m pip install -r requirements-simulation.txt
+.venv-simulation/Scripts/python scripts/plot_figure4.py
+.venv-simulation/Scripts/python scripts/plot_mixed_family.py
+python scripts/build_paper_objects.py
+```
+
+The last command now reports `final_figures/...` in its `produced from`
+column, meaning it verified what was just drawn. Figures 5-6 are not redrawn
+here because that needs the NBA refit below.
+
+### 3. Refit everything from the seeds (hours)
+
+Nothing is downloaded; all simulated data is generated from master seed
+`20260622`. See `docs/SIMULATION_REPRODUCTION.md` and
+`docs/NBA_REPRODUCTION.md` for the commands, and `docs/CODE_MAP.md` for what
+each program reads and writes.
+
+Recorded runtimes on 24 logical cores with 12 workers: 3 h 13 min for the
+all-Poisson suite, 3 h 38 min for the mixed-family suite, about 2.2 h for the
+ten NBA seasons.
+
+## Environments
+
+Three requirement files, because the two experiment lines were computed under
+different NumPy versions and must not share one environment:
+
+| File | Covers | NumPy |
 |---|---|---|
-| Figures 1–4 | `requirements-simulation.txt` | `docs/SIMULATION_REPRODUCTION.md` |
-| Figures 5–6, Table 3 | `requirements-nba.txt` | `docs/NBA_REPRODUCTION.md` |
+| `requirements-verify.txt` | integrity checks only | not used |
+| `requirements-simulation.txt` | Figures 1–4 | 2.2.6 |
+| `requirements-nba.txt` | Figures 5–6, Table 3 | 1.26.4 |
 
-`docs/CODE_MAP.md` states what every program reads and writes and how they
-chain.
-
-Redrawing the figures from the committed results takes seconds. Refitting from
-zero took 3 h 13 min and 3 h 38 min for the two simulation suites and about
-2.2 h for the ten NBA seasons, on 24 logical cores with 12 workers.
+`scripts/check_environment.py simulation` and `... nba` verify the interpreter
+and exit non-zero on a mismatch; the refit entry points refuse to run in the
+wrong one. See `docs/ENVIRONMENT.md` for why the split is enforced.
 
 ## Layout
 
