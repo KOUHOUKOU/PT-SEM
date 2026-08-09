@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""Draw the final 2x3 All-Poisson Figure 4 from validated summaries."""
+"""Draw the 2x3 all-Poisson figure from validated summaries.
+
+The output file name dates from an earlier manuscript numbering. In the
+current manuscript this is **Figure 1**:
+
+    fig4_all_poisson_library_cost_final.pdf -> Figure 1 (all-Poisson setting)
+
+See docs/PAPER_RESULT_MANIFEST.md. Refuses to draw unless the all-Poisson
+validation report is `passed` and every summary cell is complete.
+"""
 from __future__ import annotations
 
 import json

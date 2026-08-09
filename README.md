@@ -59,6 +59,9 @@ in NumPy. See `docs/ENVIRONMENT.md`.
 | Figures 1–4 | `requirements-simulation.txt` | `docs/SIMULATION_REPRODUCTION.md` |
 | Figures 5–6, Table 3 | `requirements-nba.txt` | `docs/NBA_REPRODUCTION.md` |
 
+`docs/CODE_MAP.md` states what every program reads and writes and how they
+chain.
+
 Redrawing the figures from the committed results takes seconds. Refitting from
 zero took 3 h 13 min and 3 h 38 min for the two simulation suites and about
 2.2 h for the ten NBA seasons, on 24 logical cores with 12 workers.

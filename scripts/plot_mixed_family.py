@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""Create final Figures 1--3 from validated mixed-family summaries only."""
+"""Draw the mixed-family figures from validated summaries only.
+
+Output file names date from an earlier manuscript numbering. In the current
+manuscript these are **Figures 2, 3 and 4**:
+
+    fig1_directed_f1_final.pdf                -> Figure 2 (DAG recovery F1)
+    fig2_conditional_alpha_mape_final.pdf     -> Figure 3 (coefficient MAPE)
+    fig3_working_family_diagnostics_final.pdf -> Figure 4 (family selection)
+
+See docs/PAPER_RESULT_MANIFEST.md. Refuses to draw unless the mixed-family
+validation report is `passed` at R=100.
+"""
 
 from __future__ import annotations
 
