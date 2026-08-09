@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software or the frozen results, please cite the paper."
+title: "Causal DAG Identification for Count Data via Poisson-Thinning Structural Equation Models"
+type: software
+authors:
+  - family-names: Gao
+    given-names: Penggang
+  - family-names: Cai
+    given-names: Ming
+  - family-names: Hara
+    given-names: Hisayuki
+date-released: 2026-08-05
+license: MIT
+keywords:
+  - causal discovery
+  - count data
+  - structural equation models
+  - Poisson thinning

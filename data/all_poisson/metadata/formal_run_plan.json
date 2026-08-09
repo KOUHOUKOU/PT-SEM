@@ -1,0 +1,662 @@
+{
+  "R": 100,
+  "cells": [
+    {
+      "N": 3200,
+      "alpha_high": 0.85,
+      "alpha_low": 0.15,
+      "average_indegree": 1.5,
+      "cell_base_seed": 5330321582129105504,
+      "d": 4,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT",
+        "PBSCM",
+        "PBSCM_PGF"
+      ],
+      "regime": "restricted",
+      "sweep": "dimension",
+      "sweep_value": 4
+    },
+    {
+      "N": 3200,
+      "alpha_high": 0.85,
+      "alpha_low": 0.15,
+      "average_indegree": 1.5,
+      "cell_base_seed": 7140621121218986649,
+      "d": 5,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT",
+        "PBSCM",
+        "PBSCM_PGF"
+      ],
+      "regime": "restricted",
+      "sweep": "dimension",
+      "sweep_value": 5
+    },
+    {
+      "N": 3200,
+      "alpha_high": 0.85,
+      "alpha_low": 0.15,
+      "average_indegree": 1.5,
+      "cell_base_seed": 8024270913222351331,
+      "d": 6,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT",
+        "PBSCM",
+        "PBSCM_PGF"
+      ],
+      "regime": "restricted",
+      "sweep": "dimension",
+      "sweep_value": 6
+    },
+    {
+      "N": 3200,
+      "alpha_high": 0.85,
+      "alpha_low": 0.15,
+      "average_indegree": 1.5,
+      "cell_base_seed": 667078678355930822,
+      "d": 7,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT",
+        "PBSCM",
+        "PBSCM_PGF"
+      ],
+      "regime": "restricted",
+      "sweep": "dimension",
+      "sweep_value": 7
+    },
+    {
+      "N": 3200,
+      "alpha_high": 0.85,
+      "alpha_low": 0.15,
+      "average_indegree": 1.5,
+      "cell_base_seed": 1057061291024675484,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT",
+        "PBSCM",
+        "PBSCM_PGF"
+      ],
+      "regime": "restricted",
+      "sweep": "dimension",
+      "sweep_value": 8
+    },
+    {
+      "N": 3200,
+      "alpha_high": 0.85,
+      "alpha_low": 0.15,
+      "average_indegree": 1.5,
+      "cell_base_seed": 4619700904537627606,
+      "d": 9,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT",
+        "PBSCM",
+        "PBSCM_PGF"
+      ],
+      "regime": "restricted",
+      "sweep": "dimension",
+      "sweep_value": 9
+    },
+    {
+      "N": 3200,
+      "alpha_high": 0.85,
+      "alpha_low": 0.15,
+      "average_indegree": 1.5,
+      "cell_base_seed": 4282877740683682292,
+      "d": 10,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT",
+        "PBSCM",
+        "PBSCM_PGF"
+      ],
+      "regime": "restricted",
+      "sweep": "dimension",
+      "sweep_value": 10
+    },
+    {
+      "N": 3200,
+      "alpha_high": 0.85,
+      "alpha_low": 0.15,
+      "average_indegree": 1.0,
+      "cell_base_seed": 8449733624100676398,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT",
+        "PBSCM",
+        "PBSCM_PGF"
+      ],
+      "regime": "restricted",
+      "sweep": "average_in_degree",
+      "sweep_value": 1.0
+    },
+    {
+      "N": 3200,
+      "alpha_high": 0.85,
+      "alpha_low": 0.15,
+      "average_indegree": 1.5,
+      "cell_base_seed": 4735990165588527764,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT",
+        "PBSCM",
+        "PBSCM_PGF"
+      ],
+      "regime": "restricted",
+      "sweep": "average_in_degree",
+      "sweep_value": 1.5
+    },
+    {
+      "N": 3200,
+      "alpha_high": 0.85,
+      "alpha_low": 0.15,
+      "average_indegree": 2.0,
+      "cell_base_seed": 9012296046502388788,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT",
+        "PBSCM",
+        "PBSCM_PGF"
+      ],
+      "regime": "restricted",
+      "sweep": "average_in_degree",
+      "sweep_value": 2.0
+    },
+    {
+      "N": 3200,
+      "alpha_high": 0.85,
+      "alpha_low": 0.15,
+      "average_indegree": 2.5,
+      "cell_base_seed": 479817878749170990,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT",
+        "PBSCM",
+        "PBSCM_PGF"
+      ],
+      "regime": "restricted",
+      "sweep": "average_in_degree",
+      "sweep_value": 2.5
+    },
+    {
+      "N": 3200,
+      "alpha_high": 0.85,
+      "alpha_low": 0.15,
+      "average_indegree": 3.0,
+      "cell_base_seed": 3685166584740309254,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT",
+        "PBSCM",
+        "PBSCM_PGF"
+      ],
+      "regime": "restricted",
+      "sweep": "average_in_degree",
+      "sweep_value": 3.0
+    },
+    {
+      "N": 3200,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 5330321582129105504,
+      "d": 4,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "dimension",
+      "sweep_value": 4
+    },
+    {
+      "N": 3200,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 7140621121218986649,
+      "d": 5,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "dimension",
+      "sweep_value": 5
+    },
+    {
+      "N": 3200,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 8024270913222351331,
+      "d": 6,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "dimension",
+      "sweep_value": 6
+    },
+    {
+      "N": 3200,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 667078678355930822,
+      "d": 7,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "dimension",
+      "sweep_value": 7
+    },
+    {
+      "N": 3200,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 1057061291024675484,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "dimension",
+      "sweep_value": 8
+    },
+    {
+      "N": 3200,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 4619700904537627606,
+      "d": 9,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "dimension",
+      "sweep_value": 9
+    },
+    {
+      "N": 3200,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 4282877740683682292,
+      "d": 10,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "dimension",
+      "sweep_value": 10
+    },
+    {
+      "N": 100,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 6762173753196341403,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "sample_size",
+      "sweep_value": 100
+    },
+    {
+      "N": 200,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 731964395696857360,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "sample_size",
+      "sweep_value": 200
+    },
+    {
+      "N": 400,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 1306895703805510576,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "sample_size",
+      "sweep_value": 400
+    },
+    {
+      "N": 800,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 7637329097153877338,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "sample_size",
+      "sweep_value": 800
+    },
+    {
+      "N": 1600,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 6924206008541045639,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "sample_size",
+      "sweep_value": 1600
+    },
+    {
+      "N": 3200,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 1521888474064448585,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "sample_size",
+      "sweep_value": 3200
+    },
+    {
+      "N": 6400,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 1661485552112350208,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "sample_size",
+      "sweep_value": 6400
+    },
+    {
+      "N": 10000,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 1629236597920700402,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "sample_size",
+      "sweep_value": 10000
+    },
+    {
+      "N": 3200,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.0,
+      "cell_base_seed": 8449733624100676398,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "average_in_degree",
+      "sweep_value": 1.0
+    },
+    {
+      "N": 3200,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 1.5,
+      "cell_base_seed": 4735990165588527764,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "average_in_degree",
+      "sweep_value": 1.5
+    },
+    {
+      "N": 3200,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 2.0,
+      "cell_base_seed": 9012296046502388788,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "average_in_degree",
+      "sweep_value": 2.0
+    },
+    {
+      "N": 3200,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 2.5,
+      "cell_base_seed": 479817878749170990,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "average_in_degree",
+      "sweep_value": 2.5
+    },
+    {
+      "N": 3200,
+      "alpha_high": 2.0,
+      "alpha_low": 0.2,
+      "average_indegree": 3.0,
+      "cell_base_seed": 3685166584740309254,
+      "d": 8,
+      "max_parents": 5,
+      "methods": [
+        "LibraryDP",
+        "LibraryGreedy",
+        "OracleDP",
+        "PoissonDAG-ODS",
+        "PC-RCIT"
+      ],
+      "regime": "extended",
+      "sweep": "average_in_degree",
+      "sweep_value": 3.0
+    }
+  ],
+  "config": "C:\\Users\\ROG\\Desktop\\BEST_PTSEM\\reproducibility\\jmlr_final_snapshot_20260721\\frozen_configs\\all_poisson\\jmlr_all_poisson_formal_design_v2.json",
+  "framework": {
+    "candidate_library": [
+      "Poisson",
+      "NB",
+      "ZIP",
+      "Geom",
+      "Binomial",
+      "Bernoulli"
+    ],
+    "environment_compatibility": {
+      "reason": "formal NumPy 1.26.4 versus current NumPy >=2",
+      "shim": "removed np.asfarray mapped to its documented floating np.asarray replacement for KDEpy 1.1.4"
+    },
+    "formal_data_function": "d.simulate_ptsem",
+    "formal_experiment_function": "d.run_experiment",
+    "frozen_d_path": "C:\\Users\\ROG\\Desktop\\BEST_PTSEM\\reproducibility\\jmlr_final_snapshot_20260721\\frozen_code\\methods\\d.py",
+    "frozen_d_sha256": "d14c13f5984ad90d16b9444bed1d4e7f9ad361161b63e402614f093449a65fdb",
+    "poisson_lambda": "iid Uniform(2, 10)",
+    "specialized_function": "d.make_exogenous_specs",
+    "true_family": "Poisson at every node"
+  },
+  "new_replications": 3200,
+  "restricted_sample_size_reused": true,
+  "workers": 12
+}

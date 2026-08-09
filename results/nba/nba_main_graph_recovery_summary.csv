@@ -1,0 +1,2 @@
+method,n_seasons,mean_skeleton_precision,mean_skeleton_recall,mean_skeleton_f1,mean_directed_precision,mean_directed_recall,mean_directed_f1,exact_recovery_count,exact_recovery,exact_skeleton_recovery_count,exact_skeleton_recovery,reference_skeleton_covered_count,reference_skeleton_covered
+PT-SEM (LibraryDP),10,1.0,1.0,1.0,0.975,0.975,0.975,9,9/10,10,10/10,10,10/10

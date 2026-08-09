@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "timestamp_utc": "2026-07-22T14:01:51.217515+00:00",
+  "primary_report": "results/validation/convolution/audit_report.json",
+  "core_d_path": "src/d.py",
+  "core_d_sha256": "a77b8506500d4f30da1cb86ae8b85ac25ef95d4aa1cee6afe40e9045ceb802e3",
+  "numerical_core_version": "ptsem_final_nb_exact_v2",
+  "core_formula_cases": 17850,
+  "core_failures": 0,
+  "nba_wrapper_cases": 4200,
+  "nba_wrapper_failures": 0,
+  "maximum_absolute_logpmf_error_by_family": {
+    "Poisson": 1.8189894035458565e-12,
+    "NB": 1.1920928955078125e-07,
+    "ZIP": 1.8189894035458565e-12,
+    "Geom": 3.637978807091713e-12,
+    "Binomial": 3.637978807091713e-12,
+    "Bernoulli": 3.637978807091713e-12
+  },
+  "frozen_nb_control": "confirmed failed and excluded",
+  "conclusion": "No additional convolution-path defect was found after replacing the frozen NB hyp1f1 path."
+}

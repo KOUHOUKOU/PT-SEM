@@ -1,0 +1,11 @@
+season,estimated_graph,selected_working_families,skeleton_precision,skeleton_recall,skeleton_f1,directed_precision,directed_recall,directed_f1,exact_recovery,runtime_sec
+2015-16,"FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",Poisson;Bernoulli;Geom;Poisson;Poisson,1.0,1.0,1.0,1.0,1.0,1.0,True,983.7910094999243
+2016-17,"FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",Poisson;Geom;Poisson;Poisson;Poisson,1.0,1.0,1.0,1.0,1.0,1.0,True,940.4233758000191
+2017-18,"FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",Poisson;Geom;Geom;Poisson;Poisson,1.0,1.0,1.0,1.0,1.0,1.0,True,796.2330036999192
+2018-19,"FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",Binomial;Geom;Poisson;Bernoulli;Poisson,1.0,1.0,1.0,1.0,1.0,1.0,True,623.4266706999624
+2019-20,"FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",Binomial;Bernoulli;Poisson;Poisson;Poisson,1.0,1.0,1.0,1.0,1.0,1.0,True,468.3530641000252
+2020-21,"FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",Binomial;Geom;Geom;Poisson;Poisson,1.0,1.0,1.0,1.0,1.0,1.0,True,493.22974929993507
+2021-22,"FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",Binomial;Bernoulli;Poisson;Poisson;Poisson,1.0,1.0,1.0,1.0,1.0,1.0,True,632.1790408000234
+2022-23,"FOUL->FTA, FOUL->PERS_FOUL_DRAWN, FTA->FTM, LOOSE_BALL_FOUL_DRAWN->FOUL",Binomial;Bernoulli;Poisson;Poisson;Poisson,1.0,1.0,1.0,0.75,0.75,0.75,False,682.6160685999785
+2023-24,"FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",Poisson;Geom;Poisson;Poisson;Poisson,1.0,1.0,1.0,1.0,1.0,1.0,True,673.5458577999962
+2024-25,"FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",Binomial;Bernoulli;Bernoulli;Poisson;Poisson,1.0,1.0,1.0,1.0,1.0,1.0,True,678.6485951999784

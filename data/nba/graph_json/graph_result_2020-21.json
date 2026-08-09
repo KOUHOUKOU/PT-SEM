@@ -1,0 +1,311 @@
+{
+  "alpha_matrix": [
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      1.234144117028556,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.7773571004828246,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.3899708869244288,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.05570256193599929,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  ],
+  "bic_delta_second": 9.0640433281078,
+  "core_path": "C:\\Users\\ROG\\Desktop\\BEST_PTSEM\\d.py",
+  "core_sha256": "d14c13f5984ad90d16b9444bed1d4e7f9ad361161b63e402614f093449a65fdb",
+  "created_utc": "2026-06-29T07:52:50.311238+00:00",
+  "dag_count": 29281,
+  "dataset": "foul_leaves_5_team",
+  "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",
+  "estimator": "optimization",
+  "family_library": [
+    "Poisson",
+    "NB",
+    "ZIP",
+    "Geom",
+    "Binomial",
+    "Bernoulli"
+  ],
+  "input": "C:\\Users\\ROG\\Desktop\\Basketball\\outputs\\expanded_candidate_study\\data_team_loose\\expanded_team_quarter_2020-21.csv",
+  "input_sha256": "a90ece8a7629cb3022bbebee4b4e60a3ffc88b5469887090d7e4ca03a2917a95",
+  "max_parents": 4,
+  "means": {
+    "FOUL": 4.373842592592593,
+    "FTA": 5.411111111111111,
+    "FTM": 4.206365740740741,
+    "LOOSE_BALL_FOUL_DRAWN": 0.24363425925925927,
+    "PERS_FOUL_DRAWN": 1.7056712962962963
+  },
+  "n": 8640,
+  "node_fits": [
+    {
+      "alpha": {},
+      "family": "Binomial",
+      "local_bic": 35657.06550718424,
+      "local_loglik": -17819.468595730323,
+      "node": "FOUL",
+      "optimizer_status": "CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL",
+      "optimizer_success": true,
+      "params": {
+        "n": 20,
+        "p": 0.21869212971817076
+      },
+      "parent_set": []
+    },
+    {
+      "alpha": {
+        "FOUL": 1.234144117028556
+      },
+      "family": "Geom",
+      "local_bic": 35869.80613508336,
+      "local_loglik": -17925.838909679882,
+      "node": "FTA",
+      "optimizer_status": "CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH",
+      "optimizer_success": true,
+      "params": {
+        "p": 0.9870119701439936
+      },
+      "parent_set": [
+        "FOUL"
+      ]
+    },
+    {
+      "alpha": {
+        "FTA": 0.7773571004828246
+      },
+      "family": "Geom",
+      "local_bic": 27981.438227070794,
+      "local_loglik": -13981.654955673599,
+      "node": "FTM",
+      "optimizer_status": "CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL",
+      "optimizer_success": true,
+      "params": {
+        "p": 0.9999998874648379
+      },
+      "parent_set": [
+        "FTA"
+      ]
+    },
+    {
+      "alpha": {
+        "FOUL": 0.3899708869244288
+      },
+      "family": "Poisson",
+      "local_bic": 24720.86652177644,
+      "local_loglik": -12351.369103026422,
+      "node": "PERS_FOUL_DRAWN",
+      "optimizer_status": "CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL",
+      "optimizer_success": true,
+      "params": {
+        "lam": 9.999999999999996e-11
+      },
+      "parent_set": [
+        "FOUL"
+      ]
+    },
+    {
+      "alpha": {
+        "FOUL": 0.05570256193599929
+      },
+      "family": "Poisson",
+      "local_bic": 9976.574080640341,
+      "local_loglik": -4979.222882458373,
+      "node": "LOOSE_BALL_FOUL_DRAWN",
+      "optimizer_status": "CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH",
+      "optimizer_success": true,
+      "params": {
+        "lam": 9.999999999999996e-11
+      },
+      "parent_set": [
+        "FOUL"
+      ]
+    }
+  ],
+  "optimization_maxiter": 250,
+  "optimization_starts": 2,
+  "optimization_workers": 4,
+  "parent_masks": [
+    0,
+    1,
+    2,
+    1,
+    1
+  ],
+  "runtime_sec": 493.22974929993507,
+  "score": 134205.75047175516,
+  "season": "2020-21",
+  "second_score": 134214.81451508327,
+  "selected_families": [
+    "Binomial",
+    "Geom",
+    "Geom",
+    "Poisson",
+    "Poisson"
+  ],
+  "top_dags": [
+    {
+      "delta": 0.0,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",
+      "parent_masks": [
+        0,
+        1,
+        2,
+        1,
+        1
+      ],
+      "rank": 1,
+      "score": 134205.75047175516
+    },
+    {
+      "delta": 9.0640433281078,
+      "edges": "FOUL->FTA, FOUL->FTM, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",
+      "parent_masks": [
+        0,
+        1,
+        3,
+        1,
+        1
+      ],
+      "rank": 2,
+      "score": 134214.81451508327
+    },
+    {
+      "delta": 9.0640433281078,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, PERS_FOUL_DRAWN->FTM",
+      "parent_masks": [
+        0,
+        1,
+        10,
+        1,
+        1
+      ],
+      "rank": 3,
+      "score": 134214.81451508327
+    },
+    {
+      "delta": 9.064047423395095,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, LOOSE_BALL_FOUL_DRAWN->FTM",
+      "parent_masks": [
+        0,
+        1,
+        18,
+        1,
+        1
+      ],
+      "rank": 4,
+      "score": 134214.81451917856
+    },
+    {
+      "delta": 9.064157861779677,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, FTA->LOOSE_BALL_FOUL_DRAWN",
+      "parent_masks": [
+        0,
+        1,
+        2,
+        1,
+        3
+      ],
+      "rank": 5,
+      "score": 134214.81462961694
+    },
+    {
+      "delta": 9.064157861779677,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, FTM->LOOSE_BALL_FOUL_DRAWN",
+      "parent_masks": [
+        0,
+        1,
+        2,
+        1,
+        5
+      ],
+      "rank": 6,
+      "score": 134214.81462961694
+    },
+    {
+      "delta": 9.064157861779677,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, PERS_FOUL_DRAWN->LOOSE_BALL_FOUL_DRAWN",
+      "parent_masks": [
+        0,
+        1,
+        2,
+        1,
+        9
+      ],
+      "rank": 7,
+      "score": 134214.81462961694
+    },
+    {
+      "delta": 9.064157861779677,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, FTA->PERS_FOUL_DRAWN",
+      "parent_masks": [
+        0,
+        1,
+        2,
+        3,
+        1
+      ],
+      "rank": 8,
+      "score": 134214.81462961694
+    },
+    {
+      "delta": 9.064157861779677,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, FTM->PERS_FOUL_DRAWN",
+      "parent_masks": [
+        0,
+        1,
+        2,
+        5,
+        1
+      ],
+      "rank": 9,
+      "score": 134214.81462961694
+    },
+    {
+      "delta": 9.064157861779677,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, LOOSE_BALL_FOUL_DRAWN->PERS_FOUL_DRAWN",
+      "parent_masks": [
+        0,
+        1,
+        2,
+        17,
+        1
+      ],
+      "rank": 10,
+      "score": 134214.81462961694
+    }
+  ],
+  "unit": "team-quarter",
+  "variables": [
+    "FOUL",
+    "FTA",
+    "FTM",
+    "PERS_FOUL_DRAWN",
+    "LOOSE_BALL_FOUL_DRAWN"
+  ]
+}

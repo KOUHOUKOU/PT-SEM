@@ -1,0 +1,61 @@
+{
+  "version": "jmlr_all_poisson_formal_framework_v2",
+  "master_seed": 20260702,
+  "replications": 100,
+  "workers": 12,
+  "formal_framework": {
+    "suite": "ptsem_six_family_final_suite.py",
+    "experiment_entry": "d.run_experiment",
+    "data_entry": "d.simulate_ptsem",
+    "only_specialization": "d.make_exogenous_specs returns Poisson FamilyParam values with iid lambda Uniform(2,10)",
+    "frozen_code_is_modified": false
+  },
+  "environment_compatibility": {
+    "formal_numpy": "1.26.4",
+    "current_numpy": "2.2.6",
+    "required_shim": "np.asfarray(values,dtype) -> np.asarray(values,floating dtype), solely for pinned KDEpy 1.1.4 used by PB-SCM",
+    "frozen_or_author_source_modified": false
+  },
+  "candidate_library": ["Poisson", "NB", "ZIP", "Geom", "Binomial", "Bernoulli"],
+  "true_exogenous_family": "Poisson",
+  "poisson_lambda": {"distribution": "Uniform", "low": 2.0, "high": 10.0},
+  "dag": {
+    "generator": "d.generate_random_dag",
+    "generation_mode": "exact_edges",
+    "topological_order": "fixed node-index order 0,...,d-1",
+    "max_parents": 5,
+    "edge_count_rule": "round(d * average_indegree)"
+  },
+  "regimes": {
+    "restricted": {
+      "alpha_low": 0.15,
+      "alpha_high": 0.85,
+      "methods": ["LibraryDP", "LibraryGreedy", "OracleDP", "PoissonDAG-ODS", "PC-RCIT", "PBSCM", "PBSCM_PGF"]
+    },
+    "extended": {
+      "alpha_low": 0.2,
+      "alpha_high": 2.0,
+      "methods": ["LibraryDP", "LibraryGreedy", "OracleDP", "PoissonDAG-ODS", "PC-RCIT"]
+    }
+  },
+  "display_names": {
+    "LibraryDP": "Proposed DP-BIC",
+    "LibraryGreedy": "Greedy-BIC",
+    "OracleDP": "Poisson-only DP",
+    "PoissonDAG-ODS": "ODS",
+    "PC-RCIT": "PC-RCIT",
+    "PBSCM": "PB-SCM",
+    "PBSCM_PGF": "PB-SCM-PGF"
+  },
+  "sweeps": {
+    "dimension": {"values": [4,5,6,7,8,9,10], "N": 3200, "average_indegree": 1.5},
+    "sample_size": {"values": [100,200,400,800,1600,3200,6400,10000], "d": 8, "average_indegree": 1.5, "reuse_restricted": true},
+    "average_in_degree": {"values": [1.0,1.5,2.0,2.5,3.0], "d": 8, "N": 3200}
+  },
+  "seed_rule": {
+    "cell_base_seed": "first 63 bits of SHA256(master_seed|all_poisson|sweep|canonical_value); shared across regimes for paired restricted/extended designs",
+    "data_seed": "numpy SeedSequence([cell_base_seed,d,replication,0]) via frozen d.derive_seed",
+    "method_seed": "numpy SeedSequence([cell_base_seed,d,replication,formal_method_stream]) via frozen d.derive_seed"
+  },
+  "confidence_interval": "mean +/- 1.96 * sample_SD(ddof=1) / sqrt(n_success)"
+}

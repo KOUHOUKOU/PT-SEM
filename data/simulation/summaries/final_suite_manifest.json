@@ -1,0 +1,260 @@
+{
+  "status": "complete",
+  "created_at": "2026-06-24T10:48:39.392813+00:00",
+  "last_started_at": "2026-06-24T10:48:39.392813+00:00",
+  "configuration": {
+    "suite_version": "six_family_final_v1",
+    "R": 100,
+    "workers": 12,
+    "seed": 20260622,
+    "smoke": false,
+    "sweeps": [
+      "d",
+      "N",
+      "kbar"
+    ],
+    "d_values": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "N_values": [
+      100,
+      200,
+      400,
+      800,
+      1600,
+      2400,
+      3200,
+      6400,
+      10000
+    ],
+    "kbar_values": [
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0
+    ],
+    "anchor": {
+      "d": 8,
+      "N": 3200,
+      "kbar_in": 1.5
+    },
+    "max_parents": 5,
+    "dag_generation_mode": "exact_edges",
+    "candidate_library": [
+      "Poisson",
+      "NB",
+      "ZIP",
+      "Geom",
+      "Binomial",
+      "Bernoulli"
+    ],
+    "true_family_assignment": {
+      "model": "iid categorical uniform",
+      "probability_per_family": 0.16666666666666666,
+      "forced_coexistence": false
+    },
+    "exogenous_parameter_ranges": {
+      "Poisson_lambda": [
+        2.0,
+        10.0
+      ],
+      "NB_r": [
+        2.0,
+        10.0
+      ],
+      "NB_p": [
+        0.15,
+        0.85
+      ],
+      "ZIP_lambda": [
+        2.0,
+        10.0
+      ],
+      "ZIP_rho": [
+        0.15,
+        0.85
+      ],
+      "Geom_mean": [
+        2.0,
+        10.0
+      ],
+      "Binomial_n_integers": [
+        2,
+        20
+      ],
+      "Binomial_p": [
+        0.15,
+        0.85
+      ],
+      "Bernoulli_p": [
+        0.15,
+        0.85
+      ]
+    },
+    "regimes": {
+      "common": {
+        "alpha_low": 0.15,
+        "alpha_high": 0.85,
+        "methods": [
+          "LibraryDP",
+          "LibraryGreedy",
+          "OracleDP",
+          "PC-RCIT",
+          "PBSCM",
+          "PBSCM_PGF",
+          "PoissonDAG-ODS"
+        ],
+        "description": "standard alpha<1 comparison including both PB-SCM baselines"
+      },
+      "expanded": {
+        "alpha_low": 0.2,
+        "alpha_high": 2.0,
+        "methods": [
+          "LibraryDP",
+          "LibraryGreedy",
+          "OracleDP",
+          "PC-RCIT",
+          "PoissonDAG-ODS"
+        ],
+        "description": "alpha>1 extension; PB-SCM excluded outside its model domain"
+      }
+    },
+    "fixed_family_ablations": "excluded",
+    "CPCM": "excluded",
+    "dependency_versions": {
+      "numpy": "1.26.4",
+      "pandas": "3.0.3",
+      "scipy": "1.13.0",
+      "statsmodels": "0.14.6",
+      "causal-learn": "0.1.4.7"
+    },
+    "preflight": {
+      "status": "passed",
+      "mathematical_validation": {
+        "status": "passed",
+        "likelihood_max_abs_error": {
+          "Poisson": 1.4210854715202004e-14,
+          "NB": 2.930988785010413e-14,
+          "ZIP": 2.1316282072803006e-14,
+          "Geom": 4.440892098500626e-15,
+          "Binomial": 1.4210854715202004e-14,
+          "Bernoulli": 1.4210854715202004e-14
+        },
+        "moment_recovery": {
+          "Poisson": {
+            "lam": 4.3
+          },
+          "Geom": {
+            "p": 0.2
+          },
+          "NB": {
+            "r": 5.0,
+            "p": 0.4
+          },
+          "ZIP": {
+            "lam": 4.0,
+            "rho": 0.30000000000000004
+          },
+          "Binomial": {
+            "n": 9.0,
+            "p": 0.35
+          },
+          "Bernoulli": {
+            "p": 0.35
+          }
+        },
+        "alpha_moment": {
+          "truth": 1.2,
+          "estimate": 1.1989706668629088,
+          "residual_mean_truth": 2.1,
+          "residual_mean_estimate": 2.1031597946664036,
+          "residual_variance_truth": 1.47,
+          "residual_variance_estimate": 1.4482032613924058
+        },
+        "dp": {
+          "order_graph_score": -4.173133643032553,
+          "exhaustive_score": -4.173133643032553,
+          "absolute_gap": 0.0
+        }
+      },
+      "iid_assignment_proportions_40000_draws": {
+        "Poisson": 0.168675,
+        "NB": 0.16785,
+        "ZIP": 0.16375,
+        "Geom": 0.166175,
+        "Binomial": 0.165075,
+        "Bernoulli": 0.168475
+      },
+      "expanded_alpha_stress": {
+        "expanded_d10": {
+          "max_count": 353,
+          "mean_count": 26.47675,
+          "p999_count": 279.01000000000204,
+          "edge_count": 15,
+          "distinct_true_families": 5
+        },
+        "expanded_kbar3": {
+          "max_count": 650,
+          "mean_count": 57.6490625,
+          "p999_count": 542.6019999999999,
+          "edge_count": 24,
+          "distinct_true_families": 5
+        }
+      }
+    }
+  },
+  "completed_cells": [
+    "common:d_04_N_03200_kin_1p5",
+    "common:d_05_N_03200_kin_1p5",
+    "common:d_06_N_03200_kin_1p5",
+    "common:d_07_N_03200_kin_1p5",
+    "common:d_08_N_03200_kin_1p5",
+    "common:d_09_N_03200_kin_1p5",
+    "common:d_10_N_03200_kin_1p5",
+    "common:d_08_N_00100_kin_1p5",
+    "common:d_08_N_00200_kin_1p5",
+    "common:d_08_N_00400_kin_1p5",
+    "common:d_08_N_00800_kin_1p5",
+    "common:d_08_N_01600_kin_1p5",
+    "common:d_08_N_02400_kin_1p5",
+    "common:d_08_N_06400_kin_1p5",
+    "common:d_08_N_10000_kin_1p5",
+    "common:d_08_N_03200_kin_1",
+    "common:d_08_N_03200_kin_2",
+    "common:d_08_N_03200_kin_2p5",
+    "common:d_08_N_03200_kin_3",
+    "expanded:d_04_N_03200_kin_1p5",
+    "expanded:d_05_N_03200_kin_1p5",
+    "expanded:d_06_N_03200_kin_1p5",
+    "expanded:d_07_N_03200_kin_1p5",
+    "expanded:d_08_N_03200_kin_1p5",
+    "expanded:d_09_N_03200_kin_1p5",
+    "expanded:d_10_N_03200_kin_1p5",
+    "expanded:d_08_N_00100_kin_1p5",
+    "expanded:d_08_N_00200_kin_1p5",
+    "expanded:d_08_N_00400_kin_1p5",
+    "expanded:d_08_N_00800_kin_1p5",
+    "expanded:d_08_N_01600_kin_1p5",
+    "expanded:d_08_N_02400_kin_1p5",
+    "expanded:d_08_N_06400_kin_1p5",
+    "expanded:d_08_N_10000_kin_1p5",
+    "expanded:d_08_N_03200_kin_1",
+    "expanded:d_08_N_03200_kin_2",
+    "expanded:d_08_N_03200_kin_2p5",
+    "expanded:d_08_N_03200_kin_3"
+  ],
+  "sleep_prevention": "ES_CONTINUOUS | ES_SYSTEM_REQUIRED",
+  "completed_at": "2026-06-24T15:46:23.185779+00:00",
+  "reproducibility_audit": {
+    "status": "passed",
+    "pairing_checks": 2900,
+    "failures": 0
+  }
+}
