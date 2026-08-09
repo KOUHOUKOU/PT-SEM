@@ -80,6 +80,14 @@ indegree 1.0-3.0 at `d=8, N=3200`. Restricted coefficients are Uniform(0.15,
 0.85); extended coefficients are Uniform(0.2, 2.0). PB-SCM and PB-SCM-PGF are
 excluded from extended.
 
+Note: this section describes the historical source snapshot exactly as
+recovered, including its `N=2400` sample-size cell. That cell was later
+confirmed by the author to be a leftover artifact from an abandoned prior
+experiment revision, not part of the manuscript's intended grid, and has been
+removed from the repository's committed data/summaries/figures. See
+`docs/UNRESOLVED_PROVENANCE.md` for the correction record; this historical
+description is left unmodified as provenance evidence of the original find.
+
 ## Existing All-Poisson sample-size result
 
 The frozen raw source is

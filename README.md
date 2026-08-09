@@ -1,62 +1,97 @@
-# PT-SEM reproducibility repository
+# PT-SEM: causal DAG identification for count data
 
-This repository freezes the programs, inputs, result tables, and paper figures for **“Causal DAG Identification for Count Data via Poisson-Thinning Structural Equation Models”** by Penggang Gao, Ming Cai, and Hisayuki Hara.
+Code, data and results for *Causal DAG Identification for Count Data via
+Poisson-Thinning Structural Equation Models*.
 
-The repository is result-complete: the paper figures can be regenerated from committed result tables without rerunning the expensive estimators. It also preserves the historical simulation and NBA programs needed for a fresh run. The authoritative manuscript checked during this freeze was the 33-page `PT_SEM_jmlr (44).pdf` (SHA-256 `70b2cf02b13435810b65c4d428caa774b210e539b447215f84f6cd0ada9996fa`). The manuscript itself is not redistributed here.
+Manuscript of record: `PT_SEM_jmlr (51).pdf`, SHA-256 `7f485b4e…`.
 
-## Important scientific notice
+## What this repository delivers
 
-Figures 1–4 were produced with the historical frozen scoring implementation. A later audit found that its negative-binomial thinning convolution used an invalid `hyp1f1` identity on part of the parameter domain. The exact paper artifacts are retained for reproducibility and are **not silently replaced** by corrected post-paper calculations. See [docs/UNRESOLVED_PROVENANCE.md](docs/UNRESOLVED_PROVENANCE.md) and [audit/corrected_nb_convolution](audit/corrected_nb_convolution). The NBA paper artifacts are unaffected by any repository repackaging.
+`outputs/` contains the manuscript's objects and nothing else:
 
-## Quick start
-
-Python 3.11.9 is the recorded environment. From the repository root:
-
-```bash
-python -m venv .venv
-# Windows: .venv\Scripts\activate
-# macOS/Linux: source .venv/bin/activate
-python -m pip install -r requirements.txt
-python scripts/verify_frozen_results.py
-python scripts/generate_figures.py
-python -m unittest discover -s tests -v
+```
+outputs/figures/figure1_all_poisson.pdf
+outputs/figures/figure2_dag_recovery_f1.pdf
+outputs/figures/figure3_coefficient_mape.pdf
+outputs/figures/figure4_family_selection.pdf
+outputs/figures/figure5_nba_reference_dag.pdf
+outputs/figures/figure6_nba_season_estimates.pdf
+outputs/tables/table3_nba_structural_recovery.csv
+outputs/REPRODUCTION_REPORT.md
 ```
 
-Generated PDFs are written to `figures/generated/`. The six immutable paper PDFs are in `figures/manuscript/`.
+The manuscript renumbered its figures, so the file names the plotting programs
+produce no longer match the figure numbers a reader sees.
+`docs/PAPER_RESULT_MANIFEST.md` is that mapping, and `outputs/` already applies
+it.
 
-## Paper-to-repository map
+## Check it in one command
 
-| Paper item | Frozen inputs | Regeneration entry point | Status |
-|---|---|---|---|
-| Figure 1 | mixed-family raw results and saved plot data | `scripts/generate_figures.py` | exact paper PDF preserved; redraw verified from saved data |
-| Figure 2 | mixed-family raw results and saved plot data | `scripts/generate_figures.py` | exact paper PDF preserved; redraw verified from saved data |
-| Figure 3 | family-selection summaries/confusion tables | `scripts/generate_figures.py` | exact paper PDF preserved; redraw verified from saved data |
-| Figure 4 | 24,000 all-Poisson method rows and validated summary | `scripts/generate_figures.py` | exact paper PDF preserved; formal validation passed |
-| Figure 5 | reference NBA graph | `scripts/generate_figures.py` | exact paper PDF preserved |
-| Figure 6 | ten-season coefficients and selected working families | `scripts/generate_figures.py` | exact paper PDF preserved |
-| Table 3 | `results/nba/tables/table2_nba_graph_recovery.csv` | `scripts/verify_frozen_results.py` | values match manuscript |
+No scientific environment needed; `pandas` and `pypdf` suffice.
 
-## Repository layout
+```bash
+python scripts/build_paper_objects.py
+```
 
-- `experiments/simulation/legacy`: immutable historical six-family implementation and runner.
-- `experiments/simulation/all_poisson_snapshot`: exact all-Poisson framework, configuration, and frozen scoring module.
-- `experiments/nba/scripts`: aggregation, fitting, baseline, summarization, and figure programs.
-- `data`: committed simulation results, all-Poisson results, and processed ten-season NBA team-quarter data.
-- `results/nba`: fitted graphs, coefficients, family labels, and manuscript tables.
-- `figures/manuscript`: the six PDFs embedded in the manuscript.
-- `manifests`: cryptographic inventory of the frozen publication artifacts.
-- `docs`: audit trail, settings, data provenance, runtimes, and result classifications.
+It compares every object with what the manuscript actually contains and prints
+one line per object:
 
-## Fresh computation
+```
+Figure 1   figure1_all_poisson.pdf   MATCH   514a0d4273dd807d
+...
+ALL PAPER OBJECTS REPRODUCED
+```
 
-The mixed-family formal suite uses `R=100`, master seed `20260622`, both coefficient regimes, and all three sweeps. It requires the pinned third-party baselines; run `experiments/simulation/legacy/setup_external_baselines.py` before the suite. A full run is computationally expensive and is not part of the quick verification path.
+Integrity of the shipped artifacts:
 
-The NBA raw play-by-play files are not committed because they total about 1 GB. Download Kaggle dataset `shufinskiy/nba-play-by-play-data-2015-to-2025`, version 8 (released 2025-06-26), then follow [docs/NBA_REPRODUCTION.md](docs/NBA_REPRODUCTION.md). The committed processed files allow the estimator and all paper summaries to be rerun without redistributing those raw files.
+```bash
+python scripts/verify_frozen_results.py
+python -m unittest discover -s tests
+```
 
-## Third-party code and licensing
+## Reproducing the results
 
-PB-SCM and PB-SCM-PGF are fetched at pinned commits and are excluded from this MIT-licensed repository because their upstream repositories did not provide a license at freeze time. See [docs/THIRD_PARTY.md](docs/THIRD_PARTY.md). Data licensing is documented separately in `provenance/`.
+Two pinned environments are required and must not be merged; they differ only
+in NumPy. See `docs/ENVIRONMENT.md`.
 
-## Integrity
+| Line | Environment | Guide |
+|---|---|---|
+| Figures 1–4 | `requirements-simulation.txt` | `docs/SIMULATION_REPRODUCTION.md` |
+| Figures 5–6, Table 3 | `requirements-nba.txt` | `docs/NBA_REPRODUCTION.md` |
 
-Run `python scripts/verify_frozen_results.py` at any time. It verifies SHA-256 hashes, simulation completeness, all-Poisson validation, NBA row/season constraints, and the manuscript Table 3 values.
+Redrawing the figures from the committed results takes seconds. Refitting from
+zero took 3 h 13 min and 3 h 38 min for the two simulation suites and about
+2.2 h for the ten NBA seasons, on 24 logical cores with 12 workers.
+
+## Layout
+
+```
+src/                  simulation core and frameworks (Figures 1-4)
+config/               locked simulation designs
+scripts/              run / summarize / plot / verify entry points
+experiments/nba/      NBA study: historical scripts and their core
+results/              committed results for all three lines
+data/nba/             processed NBA inputs and fitted graphs
+outputs/              the manuscript's objects
+manifests/            SHA-256 inventories
+docs/, provenance/, audit/   reproduction guides and provenance
+```
+
+Two numerical cores are shipped on purpose: `src/d.py` for Figures 1–4 and
+`experiments/nba/core/d.py` for Figures 5–6 and Table 3, matching what is
+recorded inside the frozen results. `docs/UNRESOLVED_PROVENANCE.md` explains
+why, and what was measured about the difference.
+
+## Data
+
+Simulated data is generated from master seed `20260622`; nothing is downloaded.
+The NBA study uses a Kaggle play-by-play dataset that is not redistributable —
+the processed team-quarter derivatives the study consumes are committed and
+hash-frozen. See `provenance/DATASET_LOCATION.md`.
+
+PB-SCM and PB-SCM-PGF are fetched, not redistributed; see `docs/THIRD_PARTY.md`.
+
+## License and citation
+
+MIT, see `LICENSE`. Citation metadata in `CITATION.cff`. Third-party components
+keep their own licenses.

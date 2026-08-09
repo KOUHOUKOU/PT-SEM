@@ -1,0 +1,83 @@
+{
+  "N_sweep_pair_checks": 200,
+  "N_sweep_pair_failures": 0,
+  "PB_rows_in_extended": 0,
+  "coefficient_range_failures": 0,
+  "cross_regime_pair_checks": 2000,
+  "cross_regime_pair_failures": 0,
+  "dataset_replications_present": 4000,
+  "density_nesting_checks": 800,
+  "density_nesting_failures": 0,
+  "directed_F1_mismatches": 0,
+  "duplicate_raw_rows": 0,
+  "duplicate_seed_coordinates": 0,
+  "exact_edge_rule_failures": 0,
+  "expected_dataset_replications": 4000,
+  "expected_raw_rows": 24000,
+  "failed_raw_rows": 0,
+  "failures": [],
+  "family_failures": 0,
+  "formal_cell_logs": 36,
+  "formal_cell_status_counts": {
+    "success": 36
+  },
+  "historical_results_consumed": false,
+  "invalid_seed_collisions": 0,
+  "lambda_support_failures": 0,
+  "large_sample_trend_check": [
+    {
+      "first_N": 100.0,
+      "first_mean_F1": 0.8655965367965368,
+      "last_N": 10000.0,
+      "last_mean_F1": 0.9992,
+      "method": "Poisson-only DP",
+      "reasonable": true,
+      "regime": "extended"
+    },
+    {
+      "first_N": 100.0,
+      "first_mean_F1": 0.8630072840203274,
+      "last_N": 10000.0,
+      "last_mean_F1": 0.9992,
+      "method": "Proposed DP-BIC",
+      "reasonable": true,
+      "regime": "extended"
+    },
+    {
+      "first_N": 100.0,
+      "first_mean_F1": 0.6829376454971421,
+      "last_N": 10000.0,
+      "last_mean_F1": 0.9991666666666668,
+      "method": "Poisson-only DP",
+      "reasonable": true,
+      "regime": "restricted"
+    },
+    {
+      "first_N": 100.0,
+      "first_mean_F1": 0.6510414640025624,
+      "last_N": 10000.0,
+      "last_mean_F1": 0.9991666666666668,
+      "method": "Proposed DP-BIC",
+      "reasonable": true,
+      "regime": "restricted"
+    }
+  ],
+  "max_directed_F1_absolute_difference": 1.1102230246251565e-16,
+  "method_seed_mismatches_against_raw": 0,
+  "method_set_failures": 0,
+  "method_setting_cells_expected": 240,
+  "method_setting_cells_incomplete": 0,
+  "nan_F1_rows": 0,
+  "raw_rows": 24000,
+  "seed_mismatches_against_raw": 0,
+  "seed_rows": 24000,
+  "status": "passed",
+  "truth_nunique_max_within_replication": {
+    "true_alpha_matrix": 1,
+    "true_directed_edge_set": 1,
+    "true_exogenous_families": 1,
+    "true_exogenous_params": 1
+  },
+  "warnings": [],
+  "within_regime_seed_collisions": 2800
+}

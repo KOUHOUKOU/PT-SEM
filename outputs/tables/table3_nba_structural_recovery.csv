@@ -1,0 +1,6 @@
+method,n_seasons,mean_skeleton_precision,mean_skeleton_recall,mean_skeleton_f1,mean_directed_precision,mean_directed_recall,mean_directed_f1,exact_recovery_count,exact_recovery,exact_skeleton_recovery_count,exact_skeleton_recovery,reference_skeleton_covered_count,reference_skeleton_covered,exact_recovery_rate,model_applicable_all_seasons,applicability_reason
+PT-SEM (LibraryDP),10,1.0,1.0,1.0,0.975,0.975,0.975,9,9/10,10,10/10,10,10/10,,,
+Poisson DAG (ODS-style),10,0.4,1.0,0.5714285714285714,0.2999999999999999,0.75,0.4285714285714285,0,0/10,0,0/10,10,10/10,0.0,True,
+PC (RCIT),10,0.6190476190476191,1.0,0.7636363636363637,0.1476190476190476,0.2,0.1692929292929293,0,0/10,0,0/10,10,10/10,0.0,True,
+PB-SCM (Cumulant),10,0.9,0.5,0.6304761904761904,0.75,0.275,0.3933333333333333,0,0/10,0,0/10,0,0/10,0.0,False,Raw NBA counts violate PB-SCM binomial-thinning constraints: the positive reference-edge coefficients exceed 1.
+PB-SCM (PGF),10,0.7188095238095238,0.925,0.8055050505050506,0.4233333333333333,0.45,0.4233333333333333,0,0/10,0,0/10,7,7/10,0.0,False,The PGF procedure assumes the same PB-SCM binomial-thinning model; the positive reference-edge coefficients exceed 1.

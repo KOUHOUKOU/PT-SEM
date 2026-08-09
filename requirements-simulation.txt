@@ -1,0 +1,17 @@
+# Figures 1-4 (all-Poisson and mixed-family simulations).
+# Locked to the environment that produced the manuscript figures; see
+# docs/ENVIRONMENT.md. NumPy differs from the NBA line and the two
+# environments must not be merged.
+numpy==2.2.6
+pandas==3.0.3
+scipy==1.13.0
+scikit-learn==1.9.0
+statsmodels==0.14.6
+matplotlib==3.10.9
+causal-learn==0.1.4.7
+KDEpy==1.1.4
+tqdm==4.65.0
+networkx==3.6.1
+joblib==1.5.3
+threadpoolctl==3.6.0
+momentchi2==0.1.8

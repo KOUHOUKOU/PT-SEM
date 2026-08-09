@@ -1,0 +1,16 @@
+{
+  "R": 100,
+  "alpha_mape_recomputed": true,
+  "created_at": "2026-07-23T05:49:06.721497+00:00",
+  "directed_f1_recomputed": true,
+  "family_accuracy_recomputed": true,
+  "historical_results_consumed": false,
+  "pairing": {
+    "checks": 2800,
+    "failures": 0,
+    "status": "passed"
+  },
+  "raw_rows_with_panel_membership": 24000,
+  "status": "passed",
+  "unique_physical_cells": 36
+}

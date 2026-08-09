@@ -1,18 +1,56 @@
-# Computational environment
+# Computational environments
 
-The formal mixed-family manifest records Python 3.11.9 on Windows and the following method-critical versions:
+This repository ships **two** pinned environments. They differ only in NumPy,
+and they must not be merged: each reproduction line was computed under its own
+version, and mixing them does not reproduce the manuscript.
 
-| Package | Version |
-|---|---:|
-| numpy | 1.26.4 |
-| pandas | 3.0.3 |
-| scipy | 1.13.0 |
-| statsmodels | 0.14.6 |
-| causal-learn | 0.1.4.7 |
-| matplotlib | 3.10.9 |
-| scikit-learn | 1.9.0 |
-| KDEpy | 1.1.4 |
+| | `requirements-simulation.txt` | `requirements-nba.txt` |
+|---|---|---|
+| Covers | Figures 1–4 | Figures 5–6, Table 3 |
+| Python | 3.11.9 | 3.11.9 |
+| **numpy** | **2.2.6** | **1.26.4** |
+| pandas | 3.0.3 | 3.0.3 |
+| scipy | 1.13.0 | 1.13.0 |
+| matplotlib | 3.10.9 | 3.10.9 |
+| scikit-learn, statsmodels, causal-learn, KDEpy, networkx, joblib, threadpoolctl, momentchi2, tqdm | identical | identical |
 
-`requirements.txt` pins the reproduction-critical environment. `environment/historical_full_environment.txt` is the broader environment captured later with the 2026-07-21 snapshot; it contains unrelated notebook and data-access packages and reports numpy 2.2.6. The conflict is preserved rather than hidden: the formal run manifest is authoritative for the mixed-family estimator, while the later full freeze is useful for figure/audit utilities.
+## Why the split is enforced rather than advised
 
-Multiprocessing scripts set numerical-library thread counts to one before importing NumPy/SciPy to avoid worker oversubscription. Results may vary in runtime across BLAS builds; seeded data and graph metrics should remain stable.
+The NBA pin is not a formality. Refitting season 2015-16 under the pinned
+NumPy 1.26.4 reproduced the committed result exactly — score difference 0, all
+five node BICs identical. The same code under NumPy 2.2.6 gave a score
+difference of 2.3e-05 and flipped one node's selected exogenous family from
+Geometric to Poisson.
+
+`scripts/check_environment.py` therefore takes a profile and exits non-zero on
+any mismatch, and `scripts/reproduce_nba.py` refuses to run in the wrong one:
+
+```bash
+python scripts/check_environment.py simulation
+python scripts/check_environment.py nba
+```
+
+## Creating them
+
+```bash
+python -m venv .venv-simulation
+.venv-simulation/Scripts/python -m pip install -r requirements-simulation.txt
+
+python -m venv .venv-nba
+.venv-nba/Scripts/python -m pip install -r requirements-nba.txt
+```
+
+Use `bin/python` instead of `Scripts/python` on Linux and macOS.
+
+## What does not need either environment
+
+`scripts/verify_frozen_results.py`, `scripts/build_paper_objects.py` and the
+test suite compare committed bytes and structural invariants. They are
+environment-independent and need only `pandas` and `pypdf`.
+
+## Threading
+
+The numerical core pins BLAS and OpenMP threads to one per worker through
+`threadpoolctl` before fitting. Worker count affects runtime only: the
+all-Poisson package records identical non-runtime output for 1, 4, 8 and 12
+workers.

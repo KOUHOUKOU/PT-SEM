@@ -1,0 +1,5 @@
+{
+  "R": 100,
+  "no_correct_edge": "NA",
+  "source": "recomputed from true and estimated alpha matrices over correctly recovered directed edges"
+}

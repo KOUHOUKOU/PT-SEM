@@ -48,28 +48,64 @@ def verify_hashes() -> None:
     print(f"PASS hashes ({len(rows)} files)")
 
 
+CORRECTED_CORE = "70da3d96d4013270de44e0dce1653cc27e6e2ab6582fa4b124ac962e1ebdb020"
+HISTORICAL_CORE = "d14c13f5984ad90d16b9444bed1d4e7f9ad361161b63e402614f093449a65fdb"
+FAMILY_LIBRARY = ["Poisson", "NB", "ZIP", "Geom", "Binomial", "Bernoulli"]
+N_GRID = [100, 200, 400, 800, 1600, 3200, 6400, 10000]
+
+
+def verify_cores() -> None:
+    """The two lines use different cores on purpose; neither may drift."""
+    require(digest(ROOT / "src/d.py") == CORRECTED_CORE,
+            "Simulation core is not the corrected nb_exact_v2 build")
+    require(digest(ROOT / "experiments/nba/core/d.py") == HISTORICAL_CORE,
+            "NBA core is not the historical build recorded in data/nba/graph_json")
+    for path in sorted((ROOT / "data/nba/graph_json").glob("*.json")):
+        recorded = json.loads(path.read_text(encoding="utf-8"))["core_sha256"]
+        require(recorded == HISTORICAL_CORE, f"{path.name} was fitted with a different core")
+    print("PASS numerical cores (simulation nb_exact_v2, NBA historical)")
+
+
 def verify_simulation() -> None:
-    manifest = json.loads((ROOT / "data/simulation/summaries/final_suite_manifest.json").read_text())
-    config = manifest["configuration"]
-    require(manifest["status"] == "complete", "Mixed-family suite is not complete")
-    require(config["R"] == 100 and config["seed"] == 20260622, "Formal R/seed mismatch")
-    require(config["candidate_library"] == ["Poisson", "NB", "ZIP", "Geom", "Binomial", "Bernoulli"], "Family library mismatch")
-    require(config["N_values"] == [100, 200, 400, 800, 1600, 2400, 3200, 6400, 10000], "Executed N grid mismatch")
-    require(manifest["reproducibility_audit"] == {"status": "passed", "pairing_checks": 2900, "failures": 0}, "Pairing audit mismatch")
-    for name in ("experiment1_d_sweep_raw.csv", "experiment2_N_sweep_raw.csv", "experiment3_kin_sweep_raw.csv"):
-        frame = pd.read_csv(ROOT / "data/simulation/raw" / name, usecols=["alpha_regime", "rep", "method", "seed", "directed_f1"])
-        require(frame["rep"].between(0, 99).all(), f"Replication range failure in {name}")
-        require(frame["directed_f1"].dropna().between(0, 1).all(), f"F1 range failure in {name}")
-    print("PASS mixed-family formal manifest and consolidated raw results")
+    report = json.loads((ROOT / "results/mixed_family/summaries/validation_report.json").read_text())
+    require(report["status"] == "passed", "Mixed-family validation did not pass")
+    require(report["R"] == 100, "Mixed-family R mismatch")
+    require(report["unique_physical_cells"] == 36, "Mixed-family cell count mismatch")
+    require(report["pairing"] == {"checks": 2800, "failures": 0, "status": "passed"},
+            "Mixed-family pairing audit mismatch")
+    require(report["historical_results_consumed"] is False,
+            "Mixed-family results must be a fresh run, not a repackaged snapshot")
+
+    plan = json.loads((ROOT / "results/mixed_family/metadata/formal_run_plan.json").read_text())
+    require(plan["framework"]["core_d_sha256"] == CORRECTED_CORE, "Mixed-family core mismatch")
+    require(plan["framework"]["family_library"] == FAMILY_LIBRARY, "Family library mismatch")
+
+    raw = pd.read_csv(ROOT / "results/mixed_family/raw/mixed_family_all_sweeps_raw.csv",
+                      usecols=["regime", "sweep", "N", "rep", "method", "directed_f1"])
+    require(len(raw) == 24000, f"Mixed-family row count is {len(raw)}, expected 24000")
+    require(raw["rep"].between(0, 99).all(), "Mixed-family replication range failure")
+    require(raw["directed_f1"].dropna().between(0, 1).all(), "Mixed-family F1 range failure")
+    executed = sorted(raw.loc[raw["sweep"].eq("sample_size"), "N"].unique().astype(int))
+    require(executed == N_GRID, f"Executed N grid {executed} does not match Table 2")
+    print("PASS mixed-family 24,000 rows / 36 cells / Table 2 sweep grid")
 
 
 def verify_all_poisson() -> None:
-    report = json.loads((ROOT / "data/all_poisson/metadata/validation_report.json").read_text())
+    report = json.loads((ROOT / "results/all_poisson/metadata/validation_report.json").read_text())
     require(report.get("status") == "passed", "All-Poisson validation did not pass")
-    raw = pd.read_csv(ROOT / "data/all_poisson/raw/all_poisson_per_replication.csv", usecols=["setting", "regime", "method", "replication", "F1"])
+    require(report["raw_rows"] == report["expected_raw_rows"] == 24000, "All-Poisson row count mismatch")
+    require(report["method_setting_cells_incomplete"] == 0, "All-Poisson has incomplete cells")
+    require(report["historical_results_consumed"] is False,
+            "All-Poisson results must be a fresh run, not a repackaged snapshot")
+
+    plan = json.loads((ROOT / "results/all_poisson/metadata/formal_run_plan.json").read_text())
+    require(plan["framework"]["candidate_library"] == FAMILY_LIBRARY, "Family library mismatch")
+
+    raw = pd.read_csv(ROOT / "results/all_poisson/raw/all_poisson_per_replication.csv",
+                      usecols=["setting", "regime", "method", "replication", "F1"])
     require(len(raw) == 24000, f"All-Poisson row count is {len(raw)}, expected 24000")
     require(raw["F1"].between(0, 1).all(), "All-Poisson F1 range failure")
-    summary = pd.read_csv(ROOT / "data/all_poisson/summaries/all_poisson_summary.csv")
+    summary = pd.read_csv(ROOT / "results/all_poisson/summaries/all_poisson_summary.csv")
     require(len(summary) == 240, "All-Poisson summary must have 240 cells")
     require(summary["R_success"].eq(100).all(), "All-Poisson cell completion failure")
     print("PASS all-Poisson 24,000 rows / 240 validated cells")
@@ -119,10 +155,12 @@ def verify_nba() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--section", choices=("hashes", "simulation", "all-poisson", "nba"))
+    parser.add_argument("--section",
+                        choices=("hashes", "cores", "simulation", "all-poisson", "nba"))
     args = parser.parse_args()
     checks = {
         "hashes": verify_hashes,
+        "cores": verify_cores,
         "simulation": verify_simulation,
         "all-poisson": verify_all_poisson,
         "nba": verify_nba,

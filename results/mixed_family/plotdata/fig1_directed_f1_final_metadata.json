@@ -1,0 +1,5 @@
+{
+  "R": 100,
+  "layout": "restricted/extended by dimension/sample-size/average-indegree",
+  "source": "validated raw directed edge sets"
+}

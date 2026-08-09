@@ -1,9 +1,9 @@
 # PT-SEM convolution-path audit
 
-Status: **PASSED on the locked `PTSEM_FINAL/src/d.py` exact-v2 core.**
+Status: **PASSED on the locked `src/d.py` exact-v2 core.**
 
 The current audited core SHA256 is
-`a77b8506500d4f30da1cb86ae8b85ac25ef95d4aa1cee6afe40e9045ceb802e3`.
+`70da3d96d4013270de44e0dce1653cc27e6e2ab6582fa4b124ac962e1ebdb020`.
 
 The audit is read-only with respect to the project and frozen snapshot.  It
 enumerated all convolution implementations found by a project-wide search:
@@ -61,5 +61,5 @@ Primary report: `results/validation/convolution/audit_report.json`.
 Reproduction command:
 
 ```powershell
-python tests/validate_convolutions.py
+python scripts/verify_frozen_results.py --section cores
 ```

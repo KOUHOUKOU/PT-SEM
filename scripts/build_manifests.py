@@ -9,7 +9,16 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-INCLUDED = ("data", "experiments", "figures/manuscript", "figures/plotdata", "results", "provenance", "audit")
+INCLUDED = (
+    "src",
+    "config",
+    "data",
+    "experiments",
+    "results",
+    "outputs",
+    "provenance",
+    "audit",
+)
 
 
 def digest(path: Path) -> str:
