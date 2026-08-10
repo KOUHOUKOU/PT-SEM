@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-"""Draw the mixed-family figures from validated summaries only.
+"""Draw the mixed-family figures from validated summaries.
 
-Output file names date from an earlier manuscript numbering. In the current
-manuscript these are **Figures 2, 3 and 4**:
+Output files map to the paper as:
 
     fig1_directed_f1_final.pdf                -> Figure 2 (DAG recovery F1)
-    fig2_conditional_alpha_mape_final.pdf     -> Figure 3 (coefficient MAPE)
-    fig3_working_family_diagnostics_final.pdf -> Figure 4 (family selection)
+    fig2_conditional_alpha_mape_final.pdf     -> Figure 3 (thinning-coefficient MAPE)
+    fig3_working_family_diagnostics_final.pdf -> Figure 4 (exogenous-family selection)
 
-See docs/PAPER_RESULT_MANIFEST.md. Refuses to draw unless the mixed-family
-validation report is `passed` at R=100.
+See docs/PAPER_RESULT_MANIFEST.md. Requires the mixed-family validation
+report to be `passed` at R=100.
 """
 
 from __future__ import annotations

@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
 """Verify the interpreter against the pinned reproduction environment.
 
-Numerical reruns of the fitted results are only bit-reproducible under the
-versions pinned in ``requirements.txt``.  A 2015-16 NBA control run showed a
-zero-difference match under the pinned NumPy 1.26.4 and a 2.3e-05 score
-difference, with one node's selected exogenous family flipping, under
-NumPy 2.2.6.  Entry points that recompute fits therefore refuse to run in an
-unpinned interpreter instead of silently producing results that do not match
-the paper.
+Refits reproduce the committed values only under the pinned versions. A
+2015-16 NBA control run matched exactly under NumPy 1.26.4 and differed by
+2.3e-05 under NumPy 2.2.6, changing one node's selected exogenous family.
+Entry points that recompute fits therefore exit rather than run in an
+unpinned interpreter.
 
 Hash-only verification (``scripts/verify_frozen_results.py``) compares
-committed bytes and is deliberately environment-independent, so it does not
-call this module.
+committed bytes and does not call this module.
 """
 
 from __future__ import annotations

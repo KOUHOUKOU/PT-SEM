@@ -35,19 +35,19 @@ class FrozenResultTests(unittest.TestCase):
 
 
 class PaperObjectTests(unittest.TestCase):
-    def test_every_paper_object_matches_the_manuscript(self) -> None:
-        """The seven delivered objects must be byte-identical to the paper."""
+    def test_every_paper_object_verifies(self) -> None:
+        """Each delivered object must match its expected digest."""
         completed = subprocess.run(
             [sys.executable, str(ROOT / "scripts/build_paper_objects.py"), "--check-only"],
             cwd=str(ROOT), capture_output=True, text=True,
         )
         self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
-        self.assertIn("ALL PAPER OBJECTS REPRODUCED", completed.stdout)
+        self.assertIn("ALL PAPER OBJECTS VERIFIED", completed.stdout)
 
 
 class HygieneTests(unittest.TestCase):
-    def test_no_output_lacks_a_purpose(self) -> None:
-        """outputs/ carries exactly the manuscript's objects and nothing else."""
+    def test_outputs_contains_only_paper_objects(self) -> None:
+        """outputs/ carries the paper's objects and the generated report."""
         delivered = sorted(
             path.relative_to(ROOT / "outputs").as_posix()
             for path in (ROOT / "outputs").rglob("*")

@@ -3,13 +3,11 @@
 Code, data and results for *Causal DAG Identification for Count Data via
 Poisson-Thinning Structural Equation Models*.
 
-Manuscript of record: `PT_SEM_jmlr (51).pdf`, SHA-256 `7f485b4e…`.
-
 Repository: <https://github.com/KOUHOUKOU/PT-SEM>
 
-## What this repository delivers
+## What is provided
 
-`outputs/` contains the manuscript's objects and nothing else:
+`outputs/` holds the paper's figures and table under their paper names:
 
 ```
 outputs/figures/figure1_all_poisson.pdf
@@ -22,44 +20,36 @@ outputs/tables/table3_nba_structural_recovery.csv
 outputs/REPRODUCTION_REPORT.md
 ```
 
-The manuscript renumbered its figures, so the file names the plotting programs
-produce no longer match the figure numbers a reader sees.
-`docs/PAPER_RESULT_MANIFEST.md` is that mapping, and `outputs/` already applies
-it.
+`docs/PAPER_RESULT_MANIFEST.md` maps each of these to the program and data that
+produce it.
 
-## Three ways to use this, in increasing depth
-
-### 1. Confirm the shipped objects are the paper's (30 seconds)
+## Verification
 
 ```bash
 git clone https://github.com/KOUHOUKOU/PT-SEM.git
 cd PT-SEM
 pip install -r requirements-verify.txt
 python scripts/build_paper_objects.py
-```
-
-Two packages, no scientific environment. It compares every delivered object
-with the content stream embedded in the manuscript and prints one line each:
-
-```
-Figure 1   figure1_all_poisson.pdf   MATCH   514a0d4273dd807d
-...
-ALL PAPER OBJECTS REPRODUCED
-```
-
-A `MATCH` means the file in `outputs/` is byte-identical to what the paper
-prints. The same run writes `outputs/REPRODUCTION_REPORT.md`. Integrity of the
-committed artifacts:
-
-```bash
 python scripts/verify_frozen_results.py
 python -m unittest discover -s tests
 ```
 
-### 2. Redraw the figures from the committed results (minutes)
+`build_paper_objects.py` compares each delivered object with its expected
+digest and writes `outputs/REPRODUCTION_REPORT.md`. `verify_frozen_results.py`
+checks the committed artifacts against `manifests/SHA256SUMS.csv` and the
+structural invariants of each experiment line. Neither needs a scientific
+environment.
 
-This regenerates Figures 1-4 rather than checking a shipped copy, so it
-demonstrates that the committed data really produces the published figures.
+Optionally, the released paper objects can be cross-checked against a supplied
+manuscript PDF:
+
+```bash
+python scripts/build_paper_objects.py --manuscript <path>
+```
+
+## Reproduction
+
+Figures 1–4 can be regenerated from the committed simulation results:
 
 ```bash
 python -m venv .venv-simulation
@@ -69,16 +59,10 @@ python -m venv .venv-simulation
 python scripts/build_paper_objects.py
 ```
 
-The last command now reports `final_figures/...` in its `produced from`
-column, meaning it verified what was just drawn. Figures 5-6 are not redrawn
-here because that needs the NBA refit below.
-
-### 3. Refit everything from the seeds (hours)
-
-Nothing is downloaded; all simulated data is generated from master seed
-`20260622`. See `docs/SIMULATION_REPRODUCTION.md` and
-`docs/NBA_REPRODUCTION.md` for the commands, and `docs/CODE_MAP.md` for what
-each program reads and writes.
+Refitting from zero requires no downloaded data: all simulated datasets are
+generated from master seed `20260622`. Commands are in
+`docs/SIMULATION_REPRODUCTION.md` and `docs/NBA_REPRODUCTION.md`;
+`docs/CODE_MAP.md` states what each program reads and writes.
 
 Recorded runtimes on 24 logical cores with 12 workers: 3 h 13 min for the
 all-Poisson suite, 3 h 38 min for the mixed-family suite, about 2.2 h for the
@@ -86,18 +70,18 @@ ten NBA seasons.
 
 ## Environments
 
-Three requirement files, because the two experiment lines were computed under
-different NumPy versions and must not share one environment:
+The two experiment lines were computed under different NumPy versions and
+require separate environments.
 
 | File | Covers | NumPy |
 |---|---|---|
-| `requirements-verify.txt` | integrity checks only | not used |
+| `requirements-verify.txt` | verification and tests | — |
 | `requirements-simulation.txt` | Figures 1–4 | 2.2.6 |
 | `requirements-nba.txt` | Figures 5–6, Table 3 | 1.26.4 |
 
-`scripts/check_environment.py simulation` and `... nba` verify the interpreter
+`scripts/check_environment.py simulation` and `... nba` check the interpreter
 and exit non-zero on a mismatch; the refit entry points refuse to run in the
-wrong one. See `docs/ENVIRONMENT.md` for why the split is enforced.
+wrong one. See `docs/ENVIRONMENT.md`.
 
 ## Layout
 
@@ -105,27 +89,27 @@ wrong one. See `docs/ENVIRONMENT.md` for why the split is enforced.
 src/                  simulation core and frameworks (Figures 1-4)
 config/               locked simulation designs
 scripts/              run / summarize / plot / verify entry points
-experiments/nba/      NBA study: historical scripts and their core
-results/              committed results for all three lines
+experiments/nba/      NBA study scripts and their numerical core
+results/              committed results for all three experiment lines
 data/nba/             processed NBA inputs and fitted graphs
-outputs/              the manuscript's objects
-manifests/            SHA-256 inventories
+outputs/              the paper's figures and table
+manifests/            SHA-256 inventories and the paper-object mapping
 docs/, provenance/, audit/   reproduction guides and provenance
 ```
 
-Two numerical cores are shipped on purpose: `src/d.py` for Figures 1–4 and
-`experiments/nba/core/d.py` for Figures 5–6 and Table 3, matching what is
-recorded inside the frozen results. `docs/UNRESOLVED_PROVENANCE.md` explains
-why, and what was measured about the difference.
+Two numerical cores are shipped: `src/d.py` for Figures 1–4 and
+`experiments/nba/core/d.py` for Figures 5–6 and Table 3, matching the core
+recorded in each line's frozen results. See `docs/UNRESOLVED_PROVENANCE.md`.
 
 ## Data
 
-Simulated data is generated from master seed `20260622`; nothing is downloaded.
-The NBA study uses a Kaggle play-by-play dataset that is not redistributable —
-the processed team-quarter derivatives the study consumes are committed and
-hash-frozen. See `provenance/DATASET_LOCATION.md`.
+Simulated data is generated from master seed `20260622`. The NBA study uses a
+Kaggle play-by-play dataset that is not redistributed here; the processed
+team-quarter counts consumed by the analysis are committed and hash-frozen. See
+`provenance/DATASET_LOCATION.md`.
 
-PB-SCM and PB-SCM-PGF are fetched, not redistributed; see `docs/THIRD_PARTY.md`.
+PB-SCM and PB-SCM-PGF are fetched rather than redistributed; see
+`docs/THIRD_PARTY.md`.
 
 ## License and citation
 

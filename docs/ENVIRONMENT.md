@@ -1,8 +1,7 @@
 # Computational environments
 
-This repository ships **two** pinned environments. They differ only in NumPy,
-and they must not be merged: each reproduction line was computed under its own
-version, and mixing them does not reproduce the manuscript.
+The two reproduction lines were computed under different NumPy versions and
+require separate environments.
 
 | | `requirements-simulation.txt` | `requirements-nba.txt` |
 |---|---|---|
@@ -14,16 +13,15 @@ version, and mixing them does not reproduce the manuscript.
 | matplotlib | 3.10.9 | 3.10.9 |
 | scikit-learn, statsmodels, causal-learn, KDEpy, networkx, joblib, threadpoolctl, momentchi2, tqdm | identical | identical |
 
-## Why the split is enforced rather than advised
+## Why the split is enforced
 
-The NBA pin is not a formality. Refitting season 2015-16 under the pinned
-NumPy 1.26.4 reproduced the committed result exactly — score difference 0, all
-five node BICs identical. The same code under NumPy 2.2.6 gave a score
-difference of 2.3e-05 and flipped one node's selected exogenous family from
-Geometric to Poisson.
+Refitting NBA season 2015-16 under the pinned NumPy 1.26.4 reproduced the
+committed result with a score difference of 0 and identical BICs at all five
+nodes. Under NumPy 2.2.6 the same refit differed by 2.3e-05 and changed one
+node's selected exogenous family from Geometric to Poisson.
 
-`scripts/check_environment.py` therefore takes a profile and exits non-zero on
-any mismatch, and `scripts/reproduce_nba.py` refuses to run in the wrong one:
+`scripts/check_environment.py` takes a profile and exits non-zero on a
+mismatch; `scripts/reproduce_nba.py` refuses to run in the wrong one:
 
 ```bash
 python scripts/check_environment.py simulation
@@ -45,9 +43,9 @@ Use `bin/python` instead of `Scripts/python` on Linux and macOS.
 ## What does not need either environment
 
 `scripts/verify_frozen_results.py`, `scripts/build_paper_objects.py` and the
-test suite compare committed bytes and structural invariants. They are
-environment-independent; `requirements-verify.txt` pins the two packages they
-need, and continuous integration installs only that.
+test suite compare committed bytes and structural invariants.
+`requirements-verify.txt` pins the two packages they need; continuous
+integration installs only that.
 
 ## Threading
 

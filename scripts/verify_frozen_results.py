@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify hashes and paper-facing invariants of the frozen repository."""
+"""Verify artifact digests and the structural invariants of each experiment line."""
 
 from __future__ import annotations
 
@@ -55,7 +55,7 @@ N_GRID = [100, 200, 400, 800, 1600, 3200, 6400, 10000]
 
 
 def verify_cores() -> None:
-    """The two lines use different cores on purpose; neither may drift."""
+    """Each experiment line must keep the core recorded in its results."""
     require(digest(ROOT / "src/d.py") == CORRECTED_CORE,
             "Simulation core is not the corrected nb_exact_v2 build")
     require(digest(ROOT / "experiments/nba/core/d.py") == HISTORICAL_CORE,
@@ -150,7 +150,7 @@ def verify_nba() -> None:
     by_season = pd.read_csv(ROOT / "results/nba/nba_main_graph_recovery_by_season.csv")
     require(by_season["exact_recovery"].sum() == 9, "NBA exact directed recovery must be 9/10")
     require(set(by_season.loc[~by_season["exact_recovery"], "season"]) == {"2022-23"}, "Unexpected non-exact season")
-    print("PASS NBA 95,808 rows, ten seasons, Figures 5-6 inputs, and manuscript Table 3")
+    print("PASS NBA 95,808 rows, ten seasons, Figures 5-6 inputs, and Table 3")
 
 
 def main() -> None:

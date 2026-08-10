@@ -1,9 +1,8 @@
 # Code map
 
-What each program does, what it reads, what it writes, and how they chain. The
-experiment code is shipped **as run**: the numerical cores and the historical
-NBA scripts are byte-identical to what produced the committed results, so their
-style and naming reflect their history rather than a later cleanup.
+What each program reads, writes, and how they chain. The numerical cores and
+the NBA scripts are byte-identical to the code that produced the committed
+results.
 
 ## Entry points
 
@@ -21,8 +20,7 @@ style and naming reflect their history rather than a later cleanup.
 | `scripts/plot_mixed_family.py` | simulation | `results/mixed_family/summaries/` | `final_figures/`, `results/mixed_family/plotdata/` |
 | `scripts/reproduce_nba.py` | nba | `data/nba/processed_team_quarter/` | work dir, then `outputs/` via `build_paper_objects.py` |
 
-`final_figures/` and work directories are ignored by Git. Only `outputs/` is a
-deliverable.
+`final_figures/` and work directories are ignored by Git.
 
 ## Chains
 
@@ -33,10 +31,9 @@ per-replication table, the 240-cell summary and a validation report; it refuses
 to emit a summary if any cell is incomplete. `plot_figure4.py` draws from the
 summary and refuses to draw unless the validation report is `passed`.
 
-**Figures 2–4 (mixed family).** Same shape:
-`run_mixed_family.py` → `summarize_mixed_family.py` → `plot_mixed_family.py`.
-The plotting step also writes `plotdata/`, the exact values behind each curve,
-so a reader can check a figure without rerunning anything.
+**Figures 2–4 (mixed-family setting).** `run_mixed_family.py` →
+`summarize_mixed_family.py` → `plot_mixed_family.py`. The plotting step also
+writes `plotdata/`, the values behind each curve.
 
 **Figures 5–6 and Table 3 (NBA).** `reproduce_nba.py` stages the committed
 processed CSVs into the directory layout the historical scripts expect, calls
@@ -57,25 +54,21 @@ negative-binomial branch of `convolution_loglik`:
 - `experiments/nba/core/d.py` (`d14c13f5…`) uses the earlier `hyp1f1`
   expression.
 
-Each is used by the line whose committed results record it. Neither may be
-swapped for the other without invalidating those results;
+Each is used by the line whose committed results record it;
 `verify_frozen_results.py --section cores` enforces this.
 
-## Naming that does not match the manuscript
+## Names that differ from the paper
 
-The manuscript renumbered its figures after these programs were written, so
-output file names lag the paper. The mapping lives in exactly two places, both
-checked by tests: `manifests/PAPER_OBJECTS.csv` and the module docstrings of
-the two plotting programs. `outputs/` always carries manuscript names.
+Program output names differ from the paper's numbering.
+`manifests/PAPER_OBJECTS.csv` holds the mapping and `outputs/` applies it;
+`docs/PAPER_RESULT_MANIFEST.md` is the readable form.
 
-Likewise `results/nba/tables/table2_nba_graph_recovery.csv` is the manuscript's
-**Table 3**, and the `foul_leaves_5_team` hypothesis name is internal: it
-denotes the five variables and four reference edges of manuscript Figure 5.
+`results/nba/tables/table2_nba_graph_recovery.csv` is the paper's Table 3. The
+`foul_leaves_5_team` hypothesis denotes the five variables and four reference
+edges of Figure 5.
 
 ## Conventions
 
-Entry points are argparse programs with module docstrings stating their
-contract. Validation gates are explicit and fail loudly rather than degrading:
-programs that consume a validated artifact check its report first and exit
-non-zero if it is not `passed`. Refit entry points check the interpreter
-against their pinned profile before spending compute.
+Entry points are argparse programs. Programs that consume a validated artifact
+check its report first and exit non-zero if it is not `passed`. Refit entry
+points check the interpreter against their pinned profile before running.

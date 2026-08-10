@@ -1,8 +1,8 @@
 # Reproduction report
 
-Generated 2026-08-09 12:45 UTC against `PT_SEM_jmlr (51).pdf`.
+Generated 2026-08-10 10:24 UTC by `scripts/build_paper_objects.py`.
 
-Every object below was compared with what the manuscript actually contains. Figures are compared by the PDF content stream embedded in the manuscript, which is preserved through LaTeX inclusion; the table is compared by file digest.
+Figures are compared by PDF content stream; the table is compared by file digest. Expected values are recorded in `manifests/PAPER_OBJECTS.csv`.
 
 | Paper object | Delivered as | Result | SHA-256 (first 16) | Produced from |
 |---|---|---|---|---|
@@ -14,6 +14,4 @@ Every object below was compared with what the manuscript actually contains. Figu
 | Figure 6 | `figure6_nba_season_estimates.pdf` | **MATCH** | `0ae72ed6470c36a5` | `outputs/figures/figure6_nba_season_estimates.pdf` |
 | Table 3 | `table3_nba_structural_recovery.csv` | **MATCH** | `e418afe805e9d58b` | `results/nba/tables/table2_nba_graph_recovery.csv` |
 
-All objects are byte-identical to the manuscript.
-
-Regenerate with `python scripts/build_paper_objects.py`.
+All objects match their expected digests.

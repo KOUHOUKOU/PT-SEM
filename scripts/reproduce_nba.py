@@ -1,26 +1,22 @@
 #!/usr/bin/env python3
 """Reproduce the paper's real-data results from the committed NBA inputs.
 
-Deliverables produced by this driver, and nothing else:
+Deliverables:
 
 * the recovered graph structure for each season,
-* the proposed-method row of manuscript Table 3,
-* manuscript Figures 5 and 6.
+* the Proposed DP-BIC row of Table 3,
+* Figures 5 and 6.
 
-Everything the historical scripts write on the way there (per-family local BIC
-tables, optimizer diagnostics, per-start traces, run manifests) is treated as
-intermediate and is left under ``<work-dir>/intermediate`` rather than being
-presented as a result.
+Per-family local BIC tables, optimizer diagnostics, per-start traces and run
+manifests are left under ``<work-dir>/intermediate``.
 
-The historical experiment scripts under ``experiments/nba/scripts`` are used
-unmodified.  This driver only supplies the directory layout they expect,
-because the repository stores the processed inputs under
-``data/nba/processed_team_quarter`` while the historical scripts read the
-original ``outputs/expanded_candidate_study`` layout.
+The scripts under ``experiments/nba/scripts`` are used unmodified; this driver
+supplies the directory layout they expect, since the repository stores the
+processed inputs under ``data/nba/processed_team_quarter`` while those scripts
+read the ``outputs/expanded_candidate_study`` layout.
 
-The four baseline methods in Table 3 are not recomputed here: their sources are
-not redistributable (see ``docs/THIRD_PARTY.md``).  Only the proposed-method row
-is regenerated and compared.
+The four baseline rows of Table 3 are not recomputed here: their sources are
+not redistributable (see ``docs/THIRD_PARTY.md``).
 """
 
 from __future__ import annotations
