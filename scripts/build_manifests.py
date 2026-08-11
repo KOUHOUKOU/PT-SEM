@@ -9,13 +9,14 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+#: ``outputs/`` is derived: its digests are recorded in
+#: ``manifests/PAPER_OBJECTS.csv`` and its report is regenerated on demand.
 INCLUDED = (
     "src",
     "config",
     "data",
     "experiments",
     "results",
-    "outputs",
     "provenance",
     "audit",
 )

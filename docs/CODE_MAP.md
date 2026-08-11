@@ -11,7 +11,7 @@ results.
 | `scripts/build_paper_objects.py` | none | `manifests/PAPER_OBJECTS.csv`, produced figures | `outputs/` |
 | `scripts/verify_frozen_results.py` | none | `manifests/SHA256SUMS.csv`, committed results | stdout |
 | `scripts/check_environment.py` | none | `requirements-*.txt` | stdout |
-| `scripts/build_manifests.py` | none | shipped artifacts | `manifests/SHA256SUMS.csv` |
+| `scripts/build_manifests.py` | none | source, data and results | `manifests/SHA256SUMS.csv` |
 | `scripts/run_all_poisson.py` | simulation | `config/all_poisson_final.json`, `src/` | `results/all_poisson/` |
 | `scripts/summarize_all_poisson.py` | simulation | `results/all_poisson/formal_cells/` | `results/all_poisson/{raw,summaries,metadata}` |
 | `scripts/plot_figure4.py` | simulation | `results/all_poisson/summaries/` | `final_figures/` |
@@ -20,7 +20,9 @@ results.
 | `scripts/plot_mixed_family.py` | simulation | `results/mixed_family/summaries/` | `final_figures/`, `results/mixed_family/plotdata/` |
 | `scripts/reproduce_nba.py` | nba | `data/nba/processed_team_quarter/` | work dir, then `outputs/` via `build_paper_objects.py` |
 
-`final_figures/` and work directories are ignored by Git.
+`final_figures/` and work directories are ignored by Git. `outputs/` is
+derived: `manifests/PAPER_OBJECTS.csv` records its digests, and
+`manifests/SHA256SUMS.csv` covers source, data and results.
 
 ## Chains
 
