@@ -84,8 +84,8 @@ consumes.
 ## Direct use of the historical scripts
 
 `scripts/reproduce_nba.py` calls these scripts unmodified and supplies the
-directory layout they expect. To drive them yourself, note that
-the estimator reads its input from
+directory layout they expect. To drive them yourself: the estimator reads its
+input from
 `<workspace>/outputs/expanded_candidate_study/data_team_loose/expanded_team_quarter_{season}.csv`,
 which is the original working layout rather than the repository layout. Stage
 the committed CSVs there first, then:

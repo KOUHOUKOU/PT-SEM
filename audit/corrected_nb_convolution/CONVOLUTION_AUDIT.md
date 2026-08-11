@@ -57,7 +57,7 @@ itself prove the absence of defects in DAG generation, moment estimation,
 graph search, external baselines, metrics, aggregation, or plotting; those
 remain separate provenance and validation layers.
 
-Primary report: `results/validation/convolution/audit_report.json`.
+Primary report: `audit/corrected_nb_convolution/convolution_audit_report.json`.
 Reproduction command:
 
 ```powershell
