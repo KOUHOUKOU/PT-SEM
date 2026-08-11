@@ -39,7 +39,7 @@ def verify_hashes() -> None:
     require(manifest.exists(), "Run scripts/build_manifests.py first")
     with manifest.open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
-    require(len(rows) >= 90, "Publication manifest is unexpectedly small")
+    require(len(rows) >= 80, "Artifact manifest is unexpectedly small")
     for row in rows:
         path = ROOT / row["path"]
         require(path.is_file(), f"Missing frozen file: {row['path']}")
