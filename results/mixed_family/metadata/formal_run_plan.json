@@ -758,14 +758,14 @@
       "sweep_value": 3.0
     }
   ],
-  "completed_at": "2026-07-22T19:30:25.600613+00:00",
+  "completed_at": "2026-09-01T22:20:01.393003+00:00",
   "completed_cells": 36,
-  "config": "config/mixed_family_final.json",
-  "created_at": "2026-07-22T15:52:21.012291+00:00",
+  "config": "config/mixed_family.json",
+  "created_at": "2026-09-01T18:02:12.909049+00:00",
   "datasets": 3600,
   "framework": {
-    "core_d_path": "C:\\Users\\ROG\\Desktop\\PTSEM_FINAL\\src\\d.py",
-    "core_d_sha256": "70da3d96d4013270de44e0dce1653cc27e6e2ab6582fa4b124ac962e1ebdb020",
+    "core_d_path": "src/simulation_core.py",
+    "core_d_sha256": "e61e9c58477f9ffc50552d1f538f4507756a464edcf7f5cfd16e79fe6d78df12",
     "experiment_function": "d.run_experiment",
     "family_library": [
       "Poisson",
@@ -776,7 +776,7 @@
       "Bernoulli"
     ],
     "historical_results_consumed": false,
-    "numerical_core_version": "ptsem_final_nb_exact_v2",
+    "numerical_core_version": "ptsem_submission_corrected_v3",
     "simulation_function": "d.simulate_ptsem",
     "true_family_assignment": "iid_uniform"
   },

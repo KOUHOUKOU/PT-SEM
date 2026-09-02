@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the complete corrected JMLR All-Poisson 2x3 experiment suite."""
+"""Run the complete JMLR all-Poisson 2x3 experiment suite."""
 
 from __future__ import annotations
 
@@ -34,12 +34,21 @@ sys.path.insert(0, str(SRC))
 import all_poisson_framework as formal
 
 
-CONFIG_PATH = PACKAGE_ROOT / "config" / "all_poisson_final.json"
-RESULT_ROOT = PACKAGE_ROOT / "results" / "all_poisson"
-FORMAL_ROOT = RESULT_ROOT / "formal_cells"
-METADATA_ROOT = RESULT_ROOT / "metadata"
-LOG_ROOT = RESULT_ROOT / "logs" / "formal_cells"
-PREFLIGHT_ROOT = RESULT_ROOT / "preflight"
+CONFIG_PATH = PACKAGE_ROOT / "config" / "all_poisson.json"
+RESULT_ROOT: Path | None = None
+FORMAL_ROOT: Path | None = None
+METADATA_ROOT: Path | None = None
+LOG_ROOT: Path | None = None
+PREFLIGHT_ROOT: Path | None = None
+
+
+def configure_run_root(run_root: Path) -> None:
+    global RESULT_ROOT, FORMAL_ROOT, METADATA_ROOT, LOG_ROOT, PREFLIGHT_ROOT
+    RESULT_ROOT = run_root.resolve() / "all_poisson"
+    FORMAL_ROOT = RESULT_ROOT / "formal_cells"
+    METADATA_ROOT = RESULT_ROOT / "metadata"
+    LOG_ROOT = RESULT_ROOT / "logs" / "formal_cells"
+    PREFLIGHT_ROOT = RESULT_ROOT / "preflight"
 
 
 def utc_now() -> str:
@@ -75,7 +84,7 @@ def stable_cell_base_seed(master_seed: int, sweep: str, value: object) -> int:
     """Return the paper-framework seed shared by every Table 2 cell.
 
     ``sweep`` and ``value`` are accepted deliberately so call sites document
-    the cell, but are not mixed into the seed.  The corrected core derives
+    the cell, but are not mixed into the seed.  The simulation core derives
     data and method streams from this master seed, dimension, replication and
     explicit stream ID.  This preserves cross-regime truth pairing, identical
     truth over the N sweep, and nested graphs over the density sweep.
@@ -86,10 +95,10 @@ def stable_cell_base_seed(master_seed: int, sweep: str, value: object) -> int:
 
 def load_and_validate_config() -> dict[str, object]:
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-    if config["version"] != "ptsem_final_all_poisson_v1":
+    if config["version"] != "ptsem_final_all_poisson_v2":
         raise RuntimeError("Unexpected All-Poisson config version")
-    if getattr(formal.d, "NUMERICAL_CORE_VERSION", None) != "ptsem_final_nb_exact_v2":
-        raise RuntimeError("Corrected NB exact-v2 core is not active")
+    if getattr(formal.d, "NUMERICAL_CORE_VERSION", None) != "ptsem_submission_corrected_v3":
+        raise RuntimeError("The required simulation core version is not active")
     if config["candidate_library"] != list(formal.SIX_FAMILIES):
         raise RuntimeError("Candidate library differs from the formal six-family suite")
     if config["true_exogenous_family"] != "Poisson":
@@ -249,7 +258,7 @@ def seed_plan(config: dict[str, object], cells: list[dict[str, object]], reps: i
                 stream = int(formal.d.METHOD_STREAM[str(method)])
                 rows.append(
                     {
-                        "source": "ptsem_final_corrected_core",
+                        "source": "simulation_core",
                         "regime": cell["regime"],
                         "sweep": cell["sweep"],
                         "sweep_value": cell["sweep_value"],
@@ -325,8 +334,8 @@ def run_preflight(config: dict[str, object]) -> dict[str, object]:
     root = PREFLIGHT_ROOT / stamp
     root.mkdir(parents=True, exist_ok=False)
     audit = formal.framework_provenance()
-    if audit.get("numerical_core_version") != "ptsem_final_nb_exact_v2":
-        raise RuntimeError("Preflight refused: corrected numerical core is absent")
+    if audit.get("numerical_core_version") != "ptsem_submission_corrected_v3":
+        raise RuntimeError("Preflight refused: required numerical core is absent")
 
     X, A, specs = formal.d.simulate_ptsem(4, 80, 918273645, 1.5, 5, 0.2, 2.0, "exact_edges")
     if not np.issubdtype(X.dtype, np.integer) or (X < 0).any():
@@ -344,13 +353,13 @@ def run_preflight(config: dict[str, object]) -> dict[str, object]:
     # rather than merely comparing the final graph on one data set.
     true_families = ["Poisson"] * 4
     oracle_scores, _ = formal.d.precompute_local_scores(
-        X, "OracleDP", true_families, max_parents=5
+        X, family_options=[("Poisson",)] * X.shape[1]
     )
     mean, covariance = formal.d.empirical_moments(X)
     oracle_score_checks = 0
     for child in range(4):
         for parent_mask in range(1 << 4):
-            if (parent_mask >> child) & 1 or parent_mask.bit_count() > 5:
+            if (parent_mask >> child) & 1:
                 continue
             direct = formal.d.local_score(
                 X, mean, covariance, child, parent_mask, ("Poisson",)
@@ -443,7 +452,7 @@ def run_preflight(config: dict[str, object]) -> dict[str, object]:
         "all_required_methods_smoke": smoke_validation,
         "output_root": str(root),
     }
-    atomic_json(report, METADATA_ROOT / "formal_framework_preflight.json")
+    atomic_json(report, METADATA_ROOT / "framework_validation.json")
     return report
 
 
@@ -509,6 +518,7 @@ def parse_args() -> argparse.Namespace:
         description="Formal-framework JMLR All-Poisson missing-sweep runner"
     )
     parser.add_argument("--workers", type=int, default=None)
+    parser.add_argument("--run-root", type=Path, required=True)
     parser.add_argument("--preflight-only", action="store_true")
     parser.add_argument("--plan-only", action="store_true")
     return parser.parse_args()
@@ -516,6 +526,11 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    configure_run_root(args.run_root)
+    assert FORMAL_ROOT is not None
+    assert METADATA_ROOT is not None
+    assert LOG_ROOT is not None
+    assert PREFLIGHT_ROOT is not None
     config = load_and_validate_config()
     workers = int(args.workers or config["workers"])
     reps = int(config["replications"])

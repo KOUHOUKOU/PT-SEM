@@ -1,7 +1,5 @@
-# Figures 1-4 (all-Poisson and mixed-family simulations).
-# Locked to the environment that produced the manuscript figures; see
-# docs/ENVIRONMENT.md. NumPy differs from the NBA line and the two
-# environments must not be merged.
+# Figures 1-4 and release-object verification.
+# NumPy differs from the NBA analysis, so the environments must remain separate.
 numpy==2.2.6
 pandas==3.0.3
 scipy==1.13.0
@@ -15,3 +13,4 @@ networkx==3.6.1
 joblib==1.5.3
 threadpoolctl==3.6.0
 momentchi2==0.1.8
+pypdf==6.10.2

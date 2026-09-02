@@ -1,0 +1,2 @@
+hypothesis,n_seasons,mean_skeleton_precision,mean_skeleton_recall,mean_skeleton_f1,mean_directed_precision,mean_directed_recall,mean_directed_f1,exact_count,total_runtime_sec
+foul_leaves_5_team,10,1.0,1.0,1.0,1.0,1.0,1.0,10,826.4838743000291

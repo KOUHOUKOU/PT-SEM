@@ -1,5 +1,0 @@
-# Integrity checking only: verify_frozen_results.py, build_paper_objects.py and
-# the test suite. These compare committed bytes and structural invariants, so
-# they need neither pinned scientific environment (see docs/ENVIRONMENT.md).
-pandas==3.0.3
-pypdf==6.10.2

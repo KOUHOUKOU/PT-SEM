@@ -1,8 +1,8 @@
 cff-version: 1.2.0
-message: "If you use this software or the frozen results, please cite the paper."
+message: "If you use this software or the paper results, please cite the paper."
 title: "Causal DAG Identification for Count Data via Poisson-Thinning Structural Equation Models"
 abstract: >-
-  Reproducibility package for the PT-SEM paper: the numerical cores, the locked
+  Reproducibility package for the PT-SEM paper: the numerical cores, the exact
   simulation designs, the committed results of all three experiment lines, and
   the programs that draw every figure and table the manuscript reports.
 type: software

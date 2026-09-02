@@ -22,22 +22,21 @@ if not hasattr(np, "asfarray"):
 
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[1]
-CORE_D = PACKAGE_ROOT / "src" / "d.py"
+CORE_D = PACKAGE_ROOT / "src" / "simulation_core.py"
 SIX_FAMILIES = ("Poisson", "NB", "ZIP", "Geom", "Binomial", "Bernoulli")
 
-# These variables are set before importing d.py and are inherited by Windows
+# These variables are set before importing the core and are inherited by Windows
 # spawn workers.  The assignment is iid uniform, exactly as stated in the paper.
-os.environ["PTSEM_FAMILY_LIBRARY"] = ",".join(SIX_FAMILIES)
 os.environ["PTSEM_FAMILY_ASSIGNMENT"] = "iid_uniform"
 sys.path.insert(0, str(CORE_D.parent))
 
-import d  # noqa: E402
+import simulation_core as d  # noqa: E402
 
 
 if Path(d.__file__).resolve() != CORE_D.resolve():
     raise RuntimeError(f"Imported unexpected core: {d.__file__}")
-if getattr(d, "NUMERICAL_CORE_VERSION", None) != "ptsem_final_nb_exact_v2":
-    raise RuntimeError("Corrected NB exact-v2 core is not active")
+if getattr(d, "NUMERICAL_CORE_VERSION", None) != "ptsem_submission_corrected_v3":
+    raise RuntimeError("The required simulation core version is not active")
 if tuple(d.FAMLIB) != SIX_FAMILIES or d.FAMILY_ASSIGNMENT_MODE != "iid_uniform":
     raise RuntimeError("The formal iid-uniform six-family design is not active")
 

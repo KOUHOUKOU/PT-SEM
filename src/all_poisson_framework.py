@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
-"""Audited All-Poisson specialization of the PTSEM_FINAL corrected core.
+"""All-Poisson specialization of the paper's simulation core.
 
-The corrected standalone implementation is imported from this package.  The
-sole DGP specialization
-is ``make_exogenous_specs``: every true node family is Poisson and each rate is
-drawn independently from Uniform(2, 10).
-
-Windows workers import this module through the two patched top-level wrapper
-functions below.  This makes the specialization survive ``spawn`` without
-editing the core during a run.
+The sole DGP specialization is ``make_exogenous_specs``: every true node
+family is Poisson and each rate is drawn independently from Uniform(2, 10).
+The top-level wrappers keep the specialization active in spawned workers.
 """
 
 from __future__ import annotations
@@ -25,7 +20,7 @@ import numpy as np
 # The formal run used NumPy 1.26.4.  NumPy 2 removed ``np.asfarray``, while
 # KDEpy 1.1.4 (used by the pinned PB-SCM author code) still calls it.  This is
 # the exact documented replacement for that removed conversion helper and does
-# not alter the corrected core or pinned author source.
+# not alter the simulation core or pinned author source.
 if not hasattr(np, "asfarray"):
     def _numpy_asfarray_compat(values, dtype=float):
         requested = np.dtype(dtype)
@@ -38,23 +33,22 @@ if not hasattr(np, "asfarray"):
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[1]
 CORE_DIR = PACKAGE_ROOT / "src"
-CORE_D = CORE_DIR / "d.py"
+CORE_D = CORE_DIR / "simulation_core.py"
 SIX_FAMILIES = ("Poisson", "NB", "ZIP", "Geom", "Binomial", "Bernoulli")
 
-# These must be set before importing d.py and are inherited by spawned workers.
-os.environ["PTSEM_FAMILY_LIBRARY"] = ",".join(SIX_FAMILIES)
+# These must be set before importing the core and are inherited by spawned workers.
 os.environ["PTSEM_FAMILY_ASSIGNMENT"] = "iid_uniform"
 sys.path.insert(0, str(CORE_DIR))
 
-import d  # noqa: E402
+import simulation_core as d  # noqa: E402
 
 
 if Path(d.__file__).resolve() != CORE_D.resolve():
     raise RuntimeError(
-        f"Imported unexpected d.py: {Path(d.__file__).resolve()} != {CORE_D.resolve()}"
+        f"Imported unexpected simulation core: {Path(d.__file__).resolve()} != {CORE_D.resolve()}"
     )
-if getattr(d, "NUMERICAL_CORE_VERSION", None) != "ptsem_final_nb_exact_v2":
-    raise RuntimeError("The corrected NB exact-v2 core is not active")
+if getattr(d, "NUMERICAL_CORE_VERSION", None) != "ptsem_submission_corrected_v3":
+    raise RuntimeError("The required simulation core version is not active")
 if tuple(d.FAMLIB) != SIX_FAMILIES:
     raise RuntimeError(f"Formal six-family candidate library is not active: {d.FAMLIB}")
 
@@ -74,7 +68,7 @@ def make_all_poisson_specs(
 
 
 def install_all_poisson_specialization() -> None:
-    """Install the minimal specialization into the corrected core namespace."""
+    """Install the minimal specialization into the simulation core namespace."""
     d.make_exogenous_specs = make_all_poisson_specs
     d.run_replicate_task = run_all_poisson_replicate_task
     d.initialize_worker = initialize_all_poisson_worker

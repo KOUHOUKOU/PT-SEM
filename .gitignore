@@ -2,17 +2,16 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
+.venv-*/
 venv/
 .claude/
-# Third-party baselines are fetched, not redistributed (docs/THIRD_PARTY.md)
+# Third-party baselines are fetched, not redistributed (docs/DATA.md)
 src/external/
 external/
-# Raw upstream data is not redistributable (provenance/DATASET_LOCATION.md)
+# Raw upstream data is obtained from its public source (docs/DATA.md)
 data/nba/raw/
-# Working directories produced by the reproduction drivers
-final_figures/
+# Working directories produced by reproduction programs
 work/
-scratch/
 *.log
 .DS_Store
 Thumbs.db

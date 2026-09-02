@@ -172,7 +172,7 @@ def main() -> None:
         default=Path("outputs/expanded_candidate_study/moment_screen"),
     )
     parser.add_argument(
-        "--core", type=Path, default=REPO_ROOT / "experiments/simulation/legacy/d.py"
+        "--core", type=Path, default=REPO_ROOT / "src/nba_core.py"
     )
     args = parser.parse_args()
     args.outputs_dir.mkdir(parents=True, exist_ok=True)

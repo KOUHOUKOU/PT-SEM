@@ -1,0 +1,47 @@
+{
+  "completed_seasons": [
+    "2015-16",
+    "2016-17",
+    "2017-18",
+    "2018-19",
+    "2019-20",
+    "2020-21",
+    "2021-22",
+    "2022-23",
+    "2023-24",
+    "2024-25"
+  ],
+  "signature": {
+    "core_sha256": "d65ee02ecdf78fbc634353f88b42aab71290d1ff3fdedfb2ad9119db450cfa3f",
+    "input_dir": "data/nba/processed_team_quarter",
+    "pattern": "expanded_team_quarter_{season}.csv",
+    "reference_edges": [
+      "FOUL->FTA",
+      "FOUL->LOOSE_BALL_FOUL_DRAWN",
+      "FOUL->PERS_FOUL_DRAWN",
+      "FTA->FTM"
+    ],
+    "runner_sha256": "6680b09199afd03463158e647f4776c717398bf10dddb9b8bfd61f9e44be1312",
+    "seasons": [
+      "2015-16",
+      "2016-17",
+      "2017-18",
+      "2018-19",
+      "2019-20",
+      "2020-21",
+      "2021-22",
+      "2022-23",
+      "2023-24",
+      "2024-25"
+    ],
+    "seed": 2024,
+    "variables": [
+      "FOUL",
+      "FTA",
+      "FTM",
+      "PERS_FOUL_DRAWN",
+      "LOOSE_BALL_FOUL_DRAWN"
+    ]
+  },
+  "status": "complete"
+}

@@ -1,0 +1,584 @@
+{
+  "alpha_matrix": [
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      1.2969597160516637,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.7817363387771316,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.33481686676475614,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.06514680169701265,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  ],
+  "bic_delta_second": 9.19421098951716,
+  "core_path": "src/nba_core.py",
+  "core_sha256": "d65ee02ecdf78fbc634353f88b42aab71290d1ff3fdedfb2ad9119db450cfa3f",
+  "created_utc": "2026-09-02T06:36:29.882614+00:00",
+  "dag_count": 29281,
+  "dataset": "foul_leaves_5_team",
+  "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",
+  "estimator": "optimization",
+  "family_library": [
+    "Poisson",
+    "NB",
+    "ZIP",
+    "Geom",
+    "Binomial",
+    "Bernoulli"
+  ],
+  "input": "data/nba/processed_team_quarter/expanded_team_quarter_2022-23.csv",
+  "input_sha256": "0a8a62cae31e527659bd32c729f821acbcd4aa7a02dda4cef1aef34a499f4ece",
+  "max_parents": 4,
+  "means": {
+    "FOUL": 4.475508130081301,
+    "FTA": 5.82479674796748,
+    "FTM": 4.553455284552846,
+    "LOOSE_BALL_FOUL_DRAWN": 0.2915650406504065,
+    "PERS_FOUL_DRAWN": 1.4984756097560976
+  },
+  "method_contract": {
+    "binomial_discrete_rule": "single H_Binomial index; no likelihood profiling",
+    "candidate_families": [
+      "Poisson",
+      "NB",
+      "ZIP",
+      "Geom",
+      "Binomial",
+      "Bernoulli"
+    ],
+    "estimator_binomial_n_max": 50,
+    "estimator_binomial_n_min": 2,
+    "nba_binomial_n_max": 100,
+    "nba_binomial_n_min": 2,
+    "q_binomial": 1,
+    "q_poisson": 1
+  },
+  "mle_solver_spec": "certified_mle_v1",
+  "n": 9840,
+  "node_fits": [
+    {
+      "alpha": {},
+      "diagnostics": {
+        "binomial_discrete_residual_mean": 4.475508130081301,
+        "binomial_discrete_residual_variance": 3.8575302296086984,
+        "binomial_h_extension_used": false,
+        "binomial_n_candidates": 1,
+        "binomial_n_max": 32,
+        "binomial_n_min": 32,
+        "binomial_n_policy": "paper_H_binomial_discrete_index_continuous_full_mle",
+        "binomial_n_tie_break": "not_applicable_single_mom_index",
+        "certified_profiles": 1,
+        "solver_path": "analytic_root",
+        "uncertified_profiles": 0
+      },
+      "family": "Binomial",
+      "local_bic": 40903.59921630933,
+      "local_loglik": -20447.202502659642,
+      "node": "FOUL",
+      "optimizer_status": "analytic_mle",
+      "optimizer_success": true,
+      "params": {
+        "n": 32,
+        "p": 0.13985962906504065
+      },
+      "parent_set": []
+    },
+    {
+      "alpha": {
+        "FOUL": 1.2969597160516637
+      },
+      "diagnostics": {
+        "binomial_discrete_residual_mean": null,
+        "binomial_discrete_residual_variance": null,
+        "binomial_h_extension_used": null,
+        "binomial_n_candidates": 0,
+        "binomial_n_max": null,
+        "binomial_n_min": null,
+        "binomial_n_policy": null,
+        "binomial_n_tie_break": null,
+        "certified_profiles": 1,
+        "optimizer_powell_attempted": false,
+        "optimizer_powell_success": false,
+        "optimizer_primary_failed_starts": 0,
+        "optimizer_primary_successful_starts": 2,
+        "optimizer_results": [
+          {
+            "fun": 20363.79526824945,
+            "jac": [
+              0.004001776712121566,
+              0.0
+            ],
+            "message": "CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH",
+            "method": "L-BFGS-B",
+            "nfev": 69,
+            "nit": 16,
+            "status": 0,
+            "success": true,
+            "x": [
+              1.2969597160516637,
+              -3.8794693569851337
+            ]
+          },
+          {
+            "fun": 20363.795268251855,
+            "jac": [
+              0.004001776712121566,
+              0.0003637978829201424
+            ],
+            "message": "CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH",
+            "method": "L-BFGS-B",
+            "nfev": 72,
+            "nit": 19,
+            "status": 0,
+            "success": true,
+            "x": [
+              1.2969596333293798,
+              -3.879449789529002
+            ]
+          }
+        ],
+        "solver_path": "general_convolution",
+        "uncertified_profiles": 0
+      },
+      "family": "Bernoulli",
+      "local_bic": 40745.97895847899,
+      "local_loglik": -20363.79526824945,
+      "node": "FTA",
+      "optimizer_status": "optimizer_converged_lbfgsb",
+      "optimizer_success": true,
+      "params": {
+        "p": 0.020243519041302224
+      },
+      "parent_set": [
+        "FOUL"
+      ]
+    },
+    {
+      "alpha": {
+        "FTA": 0.7817363387771316
+      },
+      "diagnostics": {
+        "binomial_discrete_residual_mean": null,
+        "binomial_discrete_residual_variance": null,
+        "binomial_h_extension_used": null,
+        "binomial_n_candidates": 0,
+        "binomial_n_max": null,
+        "binomial_n_min": null,
+        "binomial_n_policy": null,
+        "binomial_n_tie_break": null,
+        "certified_profiles": 1,
+        "optimizer_primary_failed_starts": 0,
+        "optimizer_primary_successful_starts": 2,
+        "optimizer_results": [
+          {
+            "fun": 16460.025010259134,
+            "jac": [
+              454.18661061689926,
+              76.65843660114774
+            ],
+            "message": "CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH",
+            "method": "L-BFGS-B",
+            "nfev": 3,
+            "nit": 1,
+            "status": 0,
+            "success": true,
+            "x": [
+              0.0,
+              0.7827832881405953
+            ]
+          },
+          {
+            "fun": 16459.984863610567,
+            "jac": [
+              441.61655231701604,
+              -8.506614014525127e-06
+            ],
+            "message": "CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH",
+            "method": "L-BFGS-B",
+            "nfev": 12,
+            "nit": 9,
+            "status": 0,
+            "success": true,
+            "x": [
+              0.0,
+              0.7817363387771316
+            ]
+          }
+        ],
+        "poisson_canonical_agreement_abs": 0.0,
+        "solver_path": "poisson_convex",
+        "uncertified_profiles": 0
+      },
+      "family": "Poisson",
+      "local_bic": 32938.35814920122,
+      "local_loglik": -16459.984863610567,
+      "node": "FTM",
+      "optimizer_status": "poisson_convex_mle",
+      "optimizer_success": true,
+      "params": {
+        "lam": 0.0
+      },
+      "parent_set": [
+        "FTA"
+      ]
+    },
+    {
+      "alpha": {
+        "FOUL": 0.33481686676475614
+      },
+      "diagnostics": {
+        "binomial_discrete_residual_mean": null,
+        "binomial_discrete_residual_variance": null,
+        "binomial_h_extension_used": null,
+        "binomial_n_candidates": 0,
+        "binomial_n_max": null,
+        "binomial_n_min": null,
+        "binomial_n_policy": null,
+        "binomial_n_tie_break": null,
+        "certified_profiles": 1,
+        "optimizer_primary_failed_starts": 0,
+        "optimizer_primary_successful_starts": 2,
+        "optimizer_results": [
+          {
+            "fun": 13668.010854684206,
+            "jac": [
+              1295.252289736605,
+              4706.140051478759
+            ],
+            "message": "CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH",
+            "method": "L-BFGS-B",
+            "nfev": 3,
+            "nit": 1,
+            "status": 0,
+            "success": true,
+            "x": [
+              0.0,
+              0.3748773930829947
+            ]
+          },
+          {
+            "fun": 13570.196004792553,
+            "jac": [
+              272.88118329474145,
+              -1.3580308619864923e-05
+            ],
+            "message": "CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH",
+            "method": "L-BFGS-B",
+            "nfev": 12,
+            "nit": 9,
+            "status": 0,
+            "success": true,
+            "x": [
+              0.0,
+              0.33481686676475614
+            ]
+          }
+        ],
+        "poisson_canonical_agreement_abs": 0.0,
+        "solver_path": "poisson_convex",
+        "uncertified_profiles": 0
+      },
+      "family": "Poisson",
+      "local_bic": 27158.7804315652,
+      "local_loglik": -13570.196004792553,
+      "node": "PERS_FOUL_DRAWN",
+      "optimizer_status": "poisson_convex_mle",
+      "optimizer_success": true,
+      "params": {
+        "lam": 0.0
+      },
+      "parent_set": [
+        "FOUL"
+      ]
+    },
+    {
+      "alpha": {
+        "FOUL": 0.06514680169701265
+      },
+      "diagnostics": {
+        "binomial_discrete_residual_mean": null,
+        "binomial_discrete_residual_variance": null,
+        "binomial_h_extension_used": null,
+        "binomial_n_candidates": 0,
+        "binomial_n_max": null,
+        "binomial_n_min": null,
+        "binomial_n_policy": null,
+        "binomial_n_tie_break": null,
+        "certified_profiles": 1,
+        "optimizer_primary_failed_starts": 1,
+        "optimizer_primary_successful_starts": 1,
+        "optimizer_results": [
+          {
+            "fun": 6359.561482315256,
+            "jac": [
+              2300.9981186735936,
+              8586.514374008555
+            ],
+            "message": "CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH",
+            "method": "L-BFGS-B",
+            "nfev": 3,
+            "nit": 1,
+            "status": 0,
+            "success": true,
+            "x": [
+              0.0,
+              0.08092521439164306
+            ]
+          },
+          {
+            "fun": 6286.931106707816,
+            "jac": [
+              475.0683739963248,
+              -1.0017841702847363e-06
+            ],
+            "message": "CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH",
+            "method": "L-BFGS-B",
+            "nfev": 11,
+            "nit": 6,
+            "status": 0,
+            "success": true,
+            "x": [
+              0.0,
+              0.06514680169701265
+            ]
+          }
+        ],
+        "poisson_canonical_agreement_abs": 0.0,
+        "solver_path": "poisson_convex",
+        "uncertified_profiles": 0
+      },
+      "family": "Poisson",
+      "local_bic": 12592.250635395725,
+      "local_loglik": -6286.931106707816,
+      "node": "LOOSE_BALL_FOUL_DRAWN",
+      "optimizer_status": "poisson_convex_mle",
+      "optimizer_success": true,
+      "params": {
+        "lam": 0.0
+      },
+      "parent_set": [
+        "FOUL"
+      ]
+    }
+  ],
+  "optimization_maxiter": 250,
+  "optimization_starts": 2,
+  "optimization_workers": 12,
+  "parallel_execution": {
+    "completed_tasks": 480,
+    "execution_mode": "process_pool",
+    "execution_spec": "profile_process_pool_v1",
+    "maximum_outstanding_futures": 480,
+    "maximum_workers": 12,
+    "nested_process_pools": false,
+    "parent_only_canonical_writes": true,
+    "peak_overlapping_tasks": 12,
+    "requested_workers": 12,
+    "submitted_tasks": 480,
+    "task_unit": "(child,parent_mask,family)",
+    "unique_worker_processes": 12,
+    "worker_blas_thread_values": [
+      "1"
+    ],
+    "worker_process_ids": [
+      4372,
+      4500,
+      11900,
+      18940,
+      28908,
+      40324,
+      41740,
+      42796,
+      48044,
+      48104,
+      48424,
+      50124
+    ],
+    "worker_writes": false
+  },
+  "parent_masks": [
+    0,
+    1,
+    2,
+    1,
+    1
+  ],
+  "runner_sha256": "1ed22ad95c68131a07ecb9a2d6e17589457055adac6b2b061f25ca991599587a",
+  "runtime_sec": 76.82271180005046,
+  "score": 154338.96739095048,
+  "season": "2022-23",
+  "second_score": 154348.16160194,
+  "selected_families": [
+    "Binomial",
+    "Bernoulli",
+    "Poisson",
+    "Poisson",
+    "Poisson"
+  ],
+  "top_dags": [
+    {
+      "delta": 0.0,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",
+      "parent_masks": [
+        0,
+        1,
+        2,
+        1,
+        1
+      ],
+      "rank": 1,
+      "score": 154338.96739095048
+    },
+    {
+      "delta": 9.19421098951716,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, LOOSE_BALL_FOUL_DRAWN->FTA",
+      "parent_masks": [
+        0,
+        17,
+        2,
+        1,
+        1
+      ],
+      "rank": 2,
+      "score": 154348.16160194
+    },
+    {
+      "delta": 9.194210990041029,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, LOOSE_BALL_FOUL_DRAWN->PERS_FOUL_DRAWN",
+      "parent_masks": [
+        0,
+        1,
+        2,
+        17,
+        1
+      ],
+      "rank": 3,
+      "score": 154348.16160194052
+    },
+    {
+      "delta": 9.194210990041029,
+      "edges": "FOUL->FTA, FOUL->FTM, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM",
+      "parent_masks": [
+        0,
+        1,
+        3,
+        1,
+        1
+      ],
+      "rank": 4,
+      "score": 154348.16160194052
+    },
+    {
+      "delta": 9.194210990041029,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, PERS_FOUL_DRAWN->FTM",
+      "parent_masks": [
+        0,
+        1,
+        10,
+        1,
+        1
+      ],
+      "rank": 5,
+      "score": 154348.16160194052
+    },
+    {
+      "delta": 9.194210990041029,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, LOOSE_BALL_FOUL_DRAWN->FTM",
+      "parent_masks": [
+        0,
+        1,
+        18,
+        1,
+        1
+      ],
+      "rank": 6,
+      "score": 154348.16160194052
+    },
+    {
+      "delta": 9.194211012334563,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, PERS_FOUL_DRAWN->FTA",
+      "parent_masks": [
+        0,
+        9,
+        2,
+        1,
+        1
+      ],
+      "rank": 7,
+      "score": 154348.1616019628
+    },
+    {
+      "delta": 9.194211535825161,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, FTA->PERS_FOUL_DRAWN",
+      "parent_masks": [
+        0,
+        1,
+        2,
+        3,
+        1
+      ],
+      "rank": 8,
+      "score": 154348.1616024863
+    },
+    {
+      "delta": 9.194211535825161,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, FTM->PERS_FOUL_DRAWN",
+      "parent_masks": [
+        0,
+        1,
+        2,
+        5,
+        1
+      ],
+      "rank": 9,
+      "score": 154348.1616024863
+    },
+    {
+      "delta": 9.194211940135574,
+      "edges": "FOUL->FTA, FOUL->LOOSE_BALL_FOUL_DRAWN, FOUL->PERS_FOUL_DRAWN, FTA->FTM, PERS_FOUL_DRAWN->LOOSE_BALL_FOUL_DRAWN",
+      "parent_masks": [
+        0,
+        1,
+        2,
+        1,
+        9
+      ],
+      "rank": 10,
+      "score": 154348.1616028906
+    }
+  ],
+  "unit": "team-quarter",
+  "variables": [
+    "FOUL",
+    "FTA",
+    "FTM",
+    "PERS_FOUL_DRAWN",
+    "LOOSE_BALL_FOUL_DRAWN"
+  ]
+}

@@ -18,8 +18,11 @@ def main() -> None:
         type=Path,
         default=Path("outputs/expanded_candidate_study/baselines"),
     )
+    parser.add_argument("--seasons", nargs="+", choices=baseline.SEASONS)
     args = parser.parse_args()
     spec = HYPOTHESES[args.hypothesis]
+    if args.seasons:
+        baseline.SEASONS = tuple(args.seasons)
     baseline.VARIABLES = list(spec["variables"])
     baseline.REFERENCE_EDGES = set(spec["edges"])
     is_team = args.hypothesis.endswith("_team")

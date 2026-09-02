@@ -7,8 +7,8 @@ Refits reproduce the committed values only under the pinned versions. A
 Entry points that recompute fits therefore exit rather than run in an
 unpinned interpreter.
 
-Hash-only verification (``scripts/verify_frozen_results.py``) compares
-committed bytes and does not call this module.
+The result rebuild uses committed fit and simulation records; numerical refits
+must use the corresponding pinned environment.
 """
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 #: The two reproduction lines need different NumPy versions and must not share
-#: one environment. See docs/ENVIRONMENT.md.
+#: one environment. See docs/REPRODUCING.md.
 PROFILES = {
     "simulation": ROOT / "requirements-simulation.txt",
     "nba": ROOT / "requirements-nba.txt",

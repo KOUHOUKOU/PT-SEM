@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.util
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -28,6 +30,14 @@ SEASONS = (
 )
 
 
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
 def load_module(path: Path, name: str):
     spec = importlib.util.spec_from_file_location(name, path)
     if spec is None or spec.loader is None:
@@ -36,6 +46,20 @@ def load_module(path: Path, name: str):
     sys.modules[name] = module
     spec.loader.exec_module(module)
     return module
+
+
+def atomic_csv(frame: pd.DataFrame, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + f".tmp-{os.getpid()}")
+    frame.to_csv(temporary, index=False)
+    os.replace(temporary, path)
+
+
+def atomic_json(value: object, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + f".tmp-{os.getpid()}")
+    temporary.write_text(json.dumps(value, indent=2), encoding="utf-8")
+    os.replace(temporary, path)
 
 
 def canonical(edge: tuple[str, str]) -> tuple[str, str]:
@@ -199,14 +223,9 @@ def main() -> None:
         "--pattern", default="game-quarter_counts_{season}_drawn_missfg_reb.csv"
     )
     parser.add_argument(
-        "--latest-core",
+        "--core",
         type=Path,
-        default=REPO_ROOT / "experiments/simulation/legacy/d.py",
-    )
-    parser.add_argument(
-        "--ods-core",
-        type=Path,
-        default=Path("src/run_nba_five_var_baseline_comparison_fixed.py"),
+        default=REPO_ROOT / "src/nba_core.py",
     )
     parser.add_argument(
         "--outputs-dir",
@@ -218,15 +237,63 @@ def main() -> None:
     args = parser.parse_args()
 
     args.outputs_dir.mkdir(parents=True, exist_ok=True)
-    core = load_module(args.latest_core.resolve(), "latest_ptsem_baseline_core")
-    ods = load_module(args.ods_core.resolve(), "nba_ods_baseline_core")
-    ods.VARIABLES = list(VARIABLES)
-    ods.RULE_EDGES = set(REFERENCE_EDGES)
+    core = load_module(args.core.resolve(), "ptsem_baseline_core")
 
-    rows = []
-    diagnostics = {}
-    input_rows = []
+    checkpoint_path = args.outputs_dir / "checkpoint.json"
+    checkpoint_signature = {
+        "runner_sha256": sha256(Path(__file__).resolve()),
+        "core_sha256": sha256(args.core.resolve()),
+        "variables": VARIABLES,
+        "reference_edges": sorted(f"{a}->{b}" for a, b in REFERENCE_EDGES),
+        "seasons": list(SEASONS),
+        "seed": args.seed,
+        "input_dir": str(args.input_dir.resolve()),
+        "pattern": args.pattern,
+    }
+    partial_rows = args.outputs_dir / "partial_per_season_graph_recovery.csv"
+    partial_inputs = args.outputs_dir / "partial_season_input_summary.csv"
+    partial_diagnostics = args.outputs_dir / "partial_diagnostics.json"
+    rows = (
+        pd.read_csv(partial_rows).to_dict("records")
+        if partial_rows.is_file()
+        else []
+    )
+    input_rows = (
+        pd.read_csv(partial_inputs).to_dict("records")
+        if partial_inputs.is_file()
+        else []
+    )
+    diagnostics = (
+        json.loads(partial_diagnostics.read_text(encoding="utf-8"))
+        if partial_diagnostics.is_file()
+        else {}
+    )
+    if checkpoint_path.is_file():
+        saved = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+        if saved.get("signature") != checkpoint_signature:
+            raise RuntimeError(
+                f"Refusing incompatible NBA baseline checkpoint {checkpoint_path}"
+            )
+    elif rows or input_rows or diagnostics:
+        raise RuntimeError("Partial NBA baseline files exist without a checkpoint")
+    completed_seasons = {
+        season
+        for season in SEASONS
+        if sum(str(row["season"]) == season for row in rows) == 4
+        and season in diagnostics
+    }
+    input_by_season = {str(row["season"]): row for row in input_rows}
+    for season in completed_seasons:
+        path = args.input_dir / args.pattern.format(season=season)
+        recorded = str(input_by_season.get(season, {}).get("input_sha256", ""))
+        if not path.is_file() or recorded != sha256(path):
+            raise RuntimeError(
+                f"NBA baseline checkpoint input changed or lacks a hash: {path}"
+            )
     for season in SEASONS:
+        if season in completed_seasons:
+            print(f"[{season}] resume: complete", flush=True)
+            continue
         path = args.input_dir / args.pattern.format(season=season)
         values = pd.read_csv(path)[VARIABLES].apply(pd.to_numeric, errors="coerce")
         if values.isna().any().any() or (values < 0).any().any():
@@ -237,24 +304,25 @@ def main() -> None:
                 "season": season,
                 "n": len(data),
                 "input": str(path.resolve()),
+                "input_sha256": sha256(path),
                 **{f"mean_{name}": float(values[name].mean()) for name in VARIABLES},
             }
         )
         print(f"[{season}] n={len(data)}", flush=True)
 
         start = time.perf_counter()
-        ods_edges, order, _, _ = ods.run_poisson_ods_baseline(
-            data, maxiter=args.maxiter, max_parents=None
-        )
+        ods_estimate = core.run_poisson_dag_ods_baseline(data, seed=args.seed)
+        ods_directed, ods_undirected = decode_graph_estimate(ods_estimate)
+        ods_diagnostics = ods_estimate.diagnostics or {}
         rows.append(
             {
                 "season": season,
-                "method": "Poisson DAG (ODS-style)",
+                "method": "ODS",
                 "n": len(data),
                 "runtime_sec": time.perf_counter() - start,
                 "model_applicable": True,
                 "applicability_reason": "",
-                **evaluate(set(ods_edges)),
+                **evaluate(ods_directed, ods_undirected),
             }
         )
 
@@ -314,12 +382,36 @@ def main() -> None:
         )
 
         diagnostics[season] = {
+            "ods": ods_diagnostics,
             "cumulant_raw_skeleton": c_skeleton.tolist(),
             "cumulant_raw_adjacency": c_adjacency.tolist(),
             "cumulant_one_edge_candidates": candidates,
             "pgf_raw_skeleton": p_skeleton.tolist(),
             "pgf_raw_adjacency": p_adjacency.tolist(),
         }
+        atomic_csv(pd.DataFrame(rows), partial_rows)
+        atomic_csv(pd.DataFrame(input_rows), partial_inputs)
+        atomic_json(diagnostics, partial_diagnostics)
+        completed_now = sorted(
+            {
+                str(row["season"])
+                for row in rows
+                if sum(
+                    str(candidate["season"]) == str(row["season"])
+                    for candidate in rows
+                ) == 4
+                and str(row["season"]) in diagnostics
+            },
+            key=SEASONS.index,
+        )
+        atomic_json(
+            {
+                "status": "running",
+                "signature": checkpoint_signature,
+                "completed_seasons": completed_now,
+            },
+            checkpoint_path,
+        )
         print(
             "  PC (RCIT):",
             format_edges(pc_directed),
@@ -341,45 +433,47 @@ def main() -> None:
 
     detail = pd.DataFrame(rows)
     summary = summarize(detail)
-    detail.to_csv(args.outputs_dir / "per_season_graph_recovery.csv", index=False)
-    summary.to_csv(args.outputs_dir / "method_summary.csv", index=False)
-    pd.DataFrame(input_rows).to_csv(
-        args.outputs_dir / "season_input_summary.csv", index=False
-    )
-    (args.outputs_dir / "pbscm_raw_diagnostics.json").write_text(
-        json.dumps(diagnostics, indent=2, allow_nan=True), encoding="utf-8"
-    )
-    (args.outputs_dir / "metadata.json").write_text(
-        json.dumps(
-            {
-                "variables": VARIABLES,
-                "reference_edges": sorted(
-                    f"{a}->{b}" for a, b in REFERENCE_EDGES
-                ),
-                "seed": args.seed,
-                "pc_rcit_configuration": {
-                    "alpha": 0.05,
-                    "stable": True,
-                    "approx": "lpd4",
-                    "num_f": 100,
-                    "num_f2": 5,
-                    "rcit": True,
-                },
-                "cumulant_source": str(
-                    (args.latest_core.resolve().parent / "external/PBSCM").resolve()
-                ),
-                "pgf_source": str(
-                    (
-                        args.latest_core.resolve().parent / "external/PBSCM_PGF"
-                    ).resolve()
-                ),
-                "undirected_edge_policy": (
-                    "counts toward skeleton recovery but not directed recovery"
-                ),
+    atomic_csv(detail, args.outputs_dir / "per_season_graph_recovery.csv")
+    atomic_csv(summary, args.outputs_dir / "method_summary.csv")
+    atomic_csv(pd.DataFrame(input_rows), args.outputs_dir / "season_input_summary.csv")
+    atomic_json(diagnostics, args.outputs_dir / "pbscm_raw_diagnostics.json")
+    atomic_json(
+        {
+            "variables": VARIABLES,
+            "reference_edges": sorted(
+                f"{a}->{b}" for a, b in REFERENCE_EDGES
+            ),
+            "seed": args.seed,
+            "pc_rcit_configuration": {
+                "alpha": 0.05,
+                "stable": True,
+                "approx": "lpd4",
+                "num_f": 100,
+                "num_f2": 5,
+                "rcit": True,
             },
-            indent=2,
-        ),
-        encoding="utf-8",
+            "cumulant_source": str(
+                (args.core.resolve().parent / "external/PBSCM").resolve()
+            ),
+            "pgf_source": str(
+                (
+                    args.core.resolve().parent / "external/PBSCM_PGF"
+                ).resolve()
+            ),
+            "undirected_edge_policy": (
+                "counts toward skeleton recovery but not directed recovery"
+            ),
+            "historical_results_consumed": False,
+        },
+        args.outputs_dir / "metadata.json",
+    )
+    atomic_json(
+        {
+            "status": "complete",
+            "signature": checkpoint_signature,
+            "completed_seasons": list(SEASONS),
+        },
+        checkpoint_path,
     )
     print(summary.to_string(index=False))
 

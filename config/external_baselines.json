@@ -1,0 +1,16 @@
+{
+  "PBSCM": {
+    "repository": "https://github.com/DMIRLAB-Group/PBSCM.git",
+    "commit": "08ba9ba806eacd8162f5f907c941d946a0ce69f0",
+    "directory": "src/external/PBSCM",
+    "required_files": ["PB_SCM.py", "util.py"],
+    "upstream_license_state": "no license file found at pinned commit; local scientific execution only; do not redistribute"
+  },
+  "PBSCM_PGF": {
+    "repository": "https://github.com/DMIRLAB-Group/PBSCM-PGF.git",
+    "commit": "5fdea2b7e1b796fd0b48c6e0b3be51959b4fa2c1",
+    "directory": "src/external/PBSCM_PGF",
+    "required_files": ["PB_SCM_PGF.py", "util.py", "CCARankTest.py"],
+    "upstream_license_state": "no license file found at pinned commit; local scientific execution only; do not redistribute"
+  }
+}

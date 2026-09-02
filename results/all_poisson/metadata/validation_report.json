@@ -21,6 +21,7 @@
   "formal_cell_status_counts": {
     "success": 36
   },
+  "historical_incorrect_affected_internal_rows_consumed": false,
   "historical_results_consumed": false,
   "invalid_seed_collisions": 0,
   "lambda_support_failures": 0,
@@ -36,9 +37,9 @@
     },
     {
       "first_N": 100.0,
-      "first_mean_F1": 0.8630072840203274,
+      "first_mean_F1": 0.8609947675512892,
       "last_N": 10000.0,
-      "last_mean_F1": 0.9992,
+      "last_mean_F1": 0.9975333333333335,
       "method": "Proposed DP-BIC",
       "reasonable": true,
       "regime": "extended"
@@ -54,9 +55,9 @@
     },
     {
       "first_N": 100.0,
-      "first_mean_F1": 0.6510414640025624,
+      "first_mean_F1": 0.6550379918835297,
       "last_N": 10000.0,
-      "last_mean_F1": 0.9991666666666668,
+      "last_mean_F1": 0.9966666666666667,
       "method": "Proposed DP-BIC",
       "reasonable": true,
       "regime": "restricted"
@@ -68,6 +69,7 @@
   "method_setting_cells_expected": 240,
   "method_setting_cells_incomplete": 0,
   "nan_F1_rows": 0,
+  "prior_run_unaffected_rows_consumed": false,
   "raw_rows": 24000,
   "seed_mismatches_against_raw": 0,
   "seed_rows": 24000,

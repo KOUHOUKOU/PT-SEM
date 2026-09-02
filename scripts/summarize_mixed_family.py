@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Strictly validate and summarize corrected mixed-family raw replications."""
+"""Strictly validate and summarize mixed-family raw replications."""
 
 from __future__ import annotations
 
+import argparse
 import json
 import math
 import os
@@ -20,10 +21,18 @@ sys.path.insert(0, str(SRC))
 import mixed_family_framework as formal
 import run_mixed_family as runner
 
-CONFIG_PATH = PACKAGE_ROOT / "config" / "mixed_family_final.json"
-RESULT_ROOT = PACKAGE_ROOT / "results" / "mixed_family"
-RAW_ROOT = RESULT_ROOT / "raw"
-SUMMARY_ROOT = RESULT_ROOT / "summaries"
+CONFIG_PATH = PACKAGE_ROOT / "config" / "mixed_family.json"
+RESULT_ROOT: Path | None = None
+RAW_ROOT: Path | None = None
+SUMMARY_ROOT: Path | None = None
+
+
+def configure_run_root(run_root: Path) -> None:
+    global RESULT_ROOT, RAW_ROOT, SUMMARY_ROOT
+    runner.configure_run_root(run_root)
+    RESULT_ROOT = run_root.resolve() / "mixed_family"
+    RAW_ROOT = RESULT_ROOT / "raw"
+    SUMMARY_ROOT = RESULT_ROOT / "summaries"
 
 
 def utc_now() -> str:
@@ -185,7 +194,19 @@ def confusion_table(raw: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--run-root", type=Path, required=True)
+    args = parser.parse_args()
+    configure_run_root(args.run_root)
+    assert RAW_ROOT is not None and SUMMARY_ROOT is not None
     config = runner.load_config()
+    plan_path = RESULT_ROOT / "metadata/formal_run_plan.json"
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    reused_unaffected = bool(plan.get("prior_run_unaffected_rows_consumed", False))
+    if reused_unaffected and plan.get(
+        "historical_incorrect_affected_internal_rows_consumed"
+    ) is not False:
+        raise RuntimeError("Run plan permits unsupported internal-row reuse")
     reps = int(config["replications"])
     memberships = runner.panel_cells(config)
     physical: dict[str, pd.DataFrame] = {}
@@ -225,7 +246,10 @@ def main() -> None:
     report = {
         "status": "passed", "created_at": utc_now(), "R": reps,
         "raw_rows_with_panel_membership": len(raw), "unique_physical_cells": len(physical),
-        "pairing": pairing, "historical_results_consumed": False,
+        "pairing": pairing,
+        "historical_results_consumed": reused_unaffected,
+        "prior_run_unaffected_rows_consumed": reused_unaffected,
+        "historical_incorrect_affected_internal_rows_consumed": False,
         "directed_f1_recomputed": True, "alpha_mape_recomputed": True,
         "family_accuracy_recomputed": True,
     }

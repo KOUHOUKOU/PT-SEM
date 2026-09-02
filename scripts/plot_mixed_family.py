@@ -1,18 +1,9 @@
 #!/usr/bin/env python3
-"""Draw the mixed-family figures from validated summaries.
-
-Output files map to the paper as:
-
-    fig1_directed_f1_final.pdf                -> Figure 2 (DAG recovery F1)
-    fig2_conditional_alpha_mape_final.pdf     -> Figure 3 (thinning-coefficient MAPE)
-    fig3_working_family_diagnostics_final.pdf -> Figure 4 (exogenous-family selection)
-
-See docs/PAPER_RESULT_MANIFEST.md. Requires the mixed-family validation
-report to be `passed` at R=100.
-"""
+"""Draw Figures 2-4 from complete, validated mixed-family summaries."""
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 from pathlib import Path
@@ -24,10 +15,18 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
-CONFIG = json.loads((ROOT / "config" / "mixed_family_final.json").read_text(encoding="utf-8"))
-SUMMARY_ROOT = ROOT / "results" / "mixed_family" / "summaries"
-FINAL_ROOT = ROOT / "final_figures"
-PLOTDATA_ROOT = ROOT / "results" / "mixed_family" / "plotdata"
+CONFIG = json.loads((ROOT / "config" / "mixed_family.json").read_text(encoding="utf-8"))
+SUMMARY_ROOT: Path | None = None
+FINAL_ROOT: Path | None = None
+PLOTDATA_ROOT: Path | None = None
+
+
+def configure_run_root(run_root: Path) -> None:
+    global SUMMARY_ROOT, FINAL_ROOT, PLOTDATA_ROOT
+    resolved = run_root.resolve()
+    SUMMARY_ROOT = resolved / "mixed_family" / "summaries"
+    FINAL_ROOT = resolved / "paper_objects"
+    PLOTDATA_ROOT = resolved / "mixed_family" / "plotdata"
 
 METHOD_ORDER = ("LibraryDP", "LibraryGreedy", "OracleDP", "PoissonDAG-ODS", "PC-RCIT", "PBSCM", "PBSCM_PGF")
 STYLE = {
@@ -54,6 +53,8 @@ def setup_style() -> None:
 
 
 def require_validated() -> pd.DataFrame:
+    if SUMMARY_ROOT is None:
+        raise RuntimeError("configure_run_root() must be called first")
     report_path = SUMMARY_ROOT / "validation_report.json"
     summary_path = SUMMARY_ROOT / "mixed_family_all_metrics_summary.csv"
     if not report_path.exists() or not summary_path.exists():
@@ -75,6 +76,8 @@ def configure_axis(axis: plt.Axes, sweep: str) -> None:
 
 
 def save(fig: plt.Figure, name: str, plotdata: pd.DataFrame, metadata: dict[str, object]) -> None:
+    if FINAL_ROOT is None or PLOTDATA_ROOT is None:
+        raise RuntimeError("configure_run_root() must be called first")
     FINAL_ROOT.mkdir(parents=True, exist_ok=True)
     PLOTDATA_ROOT.mkdir(parents=True, exist_ok=True)
     fig.savefig(FINAL_ROOT / f"{name}.pdf", bbox_inches="tight")
@@ -124,19 +127,24 @@ def six_panel(summary: pd.DataFrame, metric: str, ylabel: str, methods: tuple[st
 def figure1(summary: pd.DataFrame) -> None:
     data = summary.loc[summary["metric"] == "directed_f1_recomputed"].copy()
     fig = six_panel(summary, "directed_f1_recomputed", "Directed F1", METHOD_ORDER, (0, 1.02))
-    save(fig, "fig1_directed_f1_final", data, {"source": "validated raw directed edge sets", "R": 100, "layout": "restricted/extended by dimension/sample-size/average-indegree"})
+    save(fig, "figure2_dag_recovery_f1", data, {"source": "validated raw directed edge sets", "R": 100, "layout": "restricted/extended by dimension/sample-size/average-indegree"})
 
 
 def figure2(summary: pd.DataFrame) -> None:
     methods = ("LibraryDP", "LibraryGreedy", "OracleDP")
     data = summary.loc[summary["metric"] == "alpha_mape_recomputed"].copy()
     fig = six_panel(summary, "alpha_mape_recomputed", r"Conditional $\alpha$-MAPE (%)", methods, None)
-    save(fig, "fig2_conditional_alpha_mape_final", data, {"source": "recomputed from true and estimated alpha matrices over correctly recovered directed edges", "no_correct_edge": "NA", "R": 100})
+    save(fig, "figure3_coefficient_mape", data, {"source": "recomputed from true and estimated alpha matrices over correctly recovered directed edges", "no_correct_edge": "NA", "R": 100})
 
 
 def figure3(summary: pd.DataFrame) -> None:
     accuracy = summary.loc[(summary["metric"] == "family_accuracy_recomputed") & (summary["sweep"] == "sample_size")].copy()
     confusion = pd.read_csv(SUMMARY_ROOT / "mixed_family_anchor_confusion.csv")
+    PLOTDATA_ROOT.mkdir(parents=True, exist_ok=True)
+    confusion.to_csv(
+        PLOTDATA_ROOT / "figure4_family_selection_confusion_plotdata.csv",
+        index=False,
+    )
     families = tuple(CONFIG["family_library"])
     fig, axes = plt.subplots(1, 3, figsize=(11.8, 3.6), gridspec_kw={"width_ratios": [1.25, 1, 1]})
     axis = axes[0]
@@ -152,7 +160,7 @@ def figure3(summary: pd.DataFrame) -> None:
     axis.set_xlabel("Sample size $N$")
     axis.set_ylabel("Family-selection accuracy")
     configure_axis(axis, "sample_size")
-    axis.legend(frameon=False, fontsize=7, ncol=2, loc="lower center", bbox_to_anchor=(.5, 1.02), borderaxespad=0)
+    axis.legend(frameon=False, fontsize=7, ncol=2, loc="upper center", bbox_to_anchor=(.5, -.30), borderaxespad=0)
     image = None
     for axis, regime in zip(axes[1:], ("restricted", "extended")):
         matrix = confusion.loc[confusion["regime"] == regime].pivot(index="true_family", columns="selected_family", values="row_proportion").reindex(index=families, columns=families).fillna(0).to_numpy(float)
@@ -164,13 +172,21 @@ def figure3(summary: pd.DataFrame) -> None:
         axis.set_yticks(range(6), families)
         axis.set_xlabel("Selected exogenous family")
         axis.set_ylabel("Generating exogenous family")
-    fig.subplots_adjust(left=.065, right=.90, top=.78, bottom=.22, wspace=.42)
-    color_axis = fig.add_axes([.925, .26, .014, .62])
+    fig.subplots_adjust(left=.065, right=.90, top=.90, bottom=.37, wspace=.42)
+    fig.canvas.draw()
+    matrix_position = axes[1].get_position()
+    color_axis = fig.add_axes([.925, matrix_position.y0, .014, matrix_position.height])
     fig.colorbar(image, cax=color_axis, label="Row proportion")
-    save(fig, "fig3_working_family_diagnostics_final", accuracy, {"accuracy_methods": ["Proposed DP-BIC", "Greedy-BIC"], "confusion_method": "Proposed DP-BIC", "confusion_setting": {"d": 8, "N": 3200, "average_in_degree": 1.5}, "R": 100})
-
+    for panel_axis, panel_label in zip(axes, ("(a)", "(b)", "(c)")):
+        position = panel_axis.get_position()
+        fig.text(position.x0 + position.width / 2, .025, panel_label, ha="center", va="bottom", fontsize=9)
+    save(fig, "figure4_family_selection", accuracy, {"accuracy_methods": ["Proposed DP-BIC", "Greedy-BIC"], "confusion_method": "Proposed DP-BIC", "confusion_setting": {"d": 8, "N": 3200, "average_in_degree": 1.5}, "confusion_plotdata": "figure4_family_selection_confusion_plotdata.csv", "R": 100})
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--run-root", type=Path, required=True)
+    args = parser.parse_args()
+    configure_run_root(args.run_root)
     setup_style()
     summary = require_validated()
     figure1(summary)

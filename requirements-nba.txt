@@ -1,7 +1,5 @@
-# Figures 5-6 and Table 3 (ten-season NBA study).
-# NumPy 1.26.4 is required for bit-exact reproduction: a control rerun under
-# NumPy 2.2.6 changed the score by 2.3e-05 and flipped one node's selected
-# exogenous family. See docs/ENVIRONMENT.md.
+# Figures 5-6 and the ten-season NBA analysis.
+# NumPy 1.26.4 is the numerical environment recorded for the NBA fits.
 numpy==1.26.4
 pandas==3.0.3
 scipy==1.13.0
@@ -15,3 +13,4 @@ networkx==3.6.1
 joblib==1.5.3
 threadpoolctl==3.6.0
 momentchi2==0.1.8
+pypdf==6.10.2

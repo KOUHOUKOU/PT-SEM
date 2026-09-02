@@ -1,0 +1,28 @@
+{
+  "cumulant_source": "src/external/PBSCM",
+  "historical_results_consumed": false,
+  "pc_rcit_configuration": {
+    "alpha": 0.05,
+    "approx": "lpd4",
+    "num_f": 100,
+    "num_f2": 5,
+    "rcit": true,
+    "stable": true
+  },
+  "pgf_source": "src/external/PBSCM_PGF",
+  "reference_edges": [
+    "FOUL->FTA",
+    "FOUL->LOOSE_BALL_FOUL_DRAWN",
+    "FOUL->PERS_FOUL_DRAWN",
+    "FTA->FTM"
+  ],
+  "seed": 2024,
+  "undirected_edge_policy": "counts toward skeleton recovery but not directed recovery",
+  "variables": [
+    "FOUL",
+    "FTA",
+    "FTM",
+    "PERS_FOUL_DRAWN",
+    "LOOSE_BALL_FOUL_DRAWN"
+  ]
+}

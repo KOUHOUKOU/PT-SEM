@@ -1,3 +1,3 @@
 # Preserve the byte-level freeze on every platform. The SHA-256 manifest is
 # defined over repository bytes, so Git must not rewrite line endings.
-* -text
+* -text whitespace=cr-at-eol

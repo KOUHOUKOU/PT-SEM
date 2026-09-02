@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Run the corrected heterogeneous six-family Table 2 experiment cells.
+"""Run the heterogeneous six-family Table 2 experiment cells.
 
-The runner writes only inside ``PTSEM_FINAL/results/mixed_family``.  It never
-reads historical simulation results.  Complete cells are resume-safe and the
+The runner writes only inside the requested result root. Complete cells are
+resume-safe and the
 common anchor cell is physically run once per regime, then referenced by all
 three sweeps during summarization.
 """
@@ -34,11 +34,19 @@ sys.path.insert(0, str(SRC))
 
 import mixed_family_framework as formal
 
-CONFIG_PATH = PACKAGE_ROOT / "config" / "mixed_family_final.json"
-RESULT_ROOT = PACKAGE_ROOT / "results" / "mixed_family"
-CELL_ROOT = RESULT_ROOT / "formal_cells"
-LOG_ROOT = RESULT_ROOT / "logs" / "formal_cells"
-METADATA_ROOT = RESULT_ROOT / "metadata"
+CONFIG_PATH = PACKAGE_ROOT / "config" / "mixed_family.json"
+RESULT_ROOT: Path | None = None
+CELL_ROOT: Path | None = None
+LOG_ROOT: Path | None = None
+METADATA_ROOT: Path | None = None
+
+
+def configure_run_root(run_root: Path) -> None:
+    global RESULT_ROOT, CELL_ROOT, LOG_ROOT, METADATA_ROOT
+    RESULT_ROOT = run_root.resolve() / "mixed_family"
+    CELL_ROOT = RESULT_ROOT / "formal_cells"
+    LOG_ROOT = RESULT_ROOT / "logs" / "formal_cells"
+    METADATA_ROOT = RESULT_ROOT / "metadata"
 
 
 def utc_now() -> str:
@@ -70,7 +78,7 @@ def path_value(value: object) -> str:
 
 def load_config() -> dict[str, object]:
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-    if config.get("version") != "ptsem_final_mixed_family_v2":
+    if config.get("version") != "ptsem_final_mixed_family_v3":
         raise RuntimeError("Unexpected mixed-family config version")
     if config.get("numerical_core_version") != formal.d.NUMERICAL_CORE_VERSION:
         raise RuntimeError("Config/core numerical version mismatch")
@@ -81,7 +89,7 @@ def load_config() -> dict[str, object]:
     if config["sweeps"]["sample_size"]["values"] != [100, 200, 400, 800, 1600, 3200, 6400, 10000]:
         raise RuntimeError("Sample-size sweep differs from paper Table 2")
     if 2400 in config["sweeps"]["sample_size"]["values"]:
-        raise RuntimeError("Historical N=2400 must not enter the final suite")
+        raise RuntimeError("N=2400 is outside the specified sample-size sweep")
     restricted = set(config["regimes"]["restricted"]["methods"])
     extended = set(config["regimes"]["extended"]["methods"])
     expected = {"LibraryDP", "LibraryGreedy", "OracleDP", "PoissonDAG-ODS", "PC-RCIT", "PBSCM", "PBSCM_PGF"}
@@ -125,6 +133,8 @@ def unique_cells(cells: list[dict[str, object]]) -> list[dict[str, object]]:
 
 
 def cell_directory(cell: dict[str, object]) -> Path:
+    if CELL_ROOT is None:
+        raise RuntimeError("configure_run_root() must be called first")
     return CELL_ROOT / str(cell["regime"]) / f"d{cell['d']}_N{cell['N']}_k{path_value(cell['average_indegree'])}"
 
 
@@ -225,10 +235,13 @@ def run_cell(cell: dict[str, object], reps: int, workers: int) -> dict[str, obje
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Corrected final mixed-family Table 2 runner")
+    parser = argparse.ArgumentParser(description="Mixed-family Table 2 runner")
     parser.add_argument("--workers", type=int)
+    parser.add_argument("--run-root", type=Path, required=True)
     parser.add_argument("--plan-only", action="store_true")
     args = parser.parse_args()
+    configure_run_root(args.run_root)
+    assert METADATA_ROOT is not None and LOG_ROOT is not None
     config = load_config()
     workers = int(args.workers or config["workers"])
     reps = int(config["replications"])

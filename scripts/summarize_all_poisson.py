@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import math
 import os
@@ -14,12 +15,21 @@ import pandas as pd
 
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[1]
-CONFIG_PATH = PACKAGE_ROOT / "config" / "all_poisson_final.json"
-RESULT_ROOT = PACKAGE_ROOT / "results" / "all_poisson"
-RAW_OUTPUT = RESULT_ROOT / "raw/all_poisson_per_replication.csv"
-SUMMARY_OUTPUT = RESULT_ROOT / "summaries/all_poisson_summary.csv"
-VALIDATION_OUTPUT = RESULT_ROOT / "metadata/validation_report.json"
-SEED_PATH = RESULT_ROOT / "metadata/seeds.csv"
+CONFIG_PATH = PACKAGE_ROOT / "config" / "all_poisson.json"
+RESULT_ROOT: Path | None = None
+RAW_OUTPUT: Path | None = None
+SUMMARY_OUTPUT: Path | None = None
+VALIDATION_OUTPUT: Path | None = None
+SEED_PATH: Path | None = None
+
+
+def configure_run_root(run_root: Path) -> None:
+    global RESULT_ROOT, RAW_OUTPUT, SUMMARY_OUTPUT, VALIDATION_OUTPUT, SEED_PATH
+    RESULT_ROOT = run_root.resolve() / "all_poisson"
+    RAW_OUTPUT = RESULT_ROOT / "raw/all_poisson_per_replication.csv"
+    SUMMARY_OUTPUT = RESULT_ROOT / "summaries/all_poisson_summary.csv"
+    VALIDATION_OUTPUT = RESULT_ROOT / "metadata/validation_report.json"
+    SEED_PATH = RESULT_ROOT / "metadata/seeds.csv"
 
 
 def atomic_csv(frame: pd.DataFrame, path: Path) -> None:
@@ -127,7 +137,7 @@ def normalize_formal_cell(log_path: Path, display_names: Mapping[str, str]) -> p
             "n_true_edges": source["n_true_edges"],
             "n_estimated_directed": source["n_est_directed_edges"],
             "n_estimated_undirected": source["n_est_undirected_edges"],
-            "source": "ptsem_final_corrected_core",
+            "source": "simulation_core",
             "raw_file": str(raw_path.relative_to(PACKAGE_ROOT)).replace("\\", "/"),
             "dag_generation_mode": source["dag_generation_mode"],
             "realized_avg_indegree": source["realized_avg_indegree"],
@@ -550,10 +560,29 @@ def validation_report(
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--run-root", type=Path, required=True)
+    args = parser.parse_args()
+    configure_run_root(args.run_root)
+    assert RESULT_ROOT is not None
+    assert RAW_OUTPUT is not None
+    assert SUMMARY_OUTPUT is not None
+    assert VALIDATION_OUTPUT is not None
+    assert SEED_PATH is not None
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    plan_path = RESULT_ROOT / "metadata/formal_run_plan.json"
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    reused_unaffected = bool(plan.get("prior_run_unaffected_rows_consumed", False))
+    if reused_unaffected and plan.get(
+        "historical_incorrect_affected_internal_rows_consumed"
+    ) is not False:
+        raise RuntimeError("Run plan permits unsupported internal-row reuse")
     raw, duplicate_rows, formal_logs = load_raw(config)
     summary = summarize(raw, config)
     report = validation_report(raw, summary, config, duplicate_rows, formal_logs)
+    report["historical_results_consumed"] = reused_unaffected
+    report["prior_run_unaffected_rows_consumed"] = reused_unaffected
+    report["historical_incorrect_affected_internal_rows_consumed"] = False
     atomic_csv(raw, RAW_OUTPUT)
     atomic_csv(summary, SUMMARY_OUTPUT)
     atomic_json(report, VALIDATION_OUTPUT)

@@ -1,10 +1,11 @@
-"""Run the final optimized six-family PT-SEM for one candidate hypothesis."""
+"""Run optimized six-family PT-SEM for one candidate hypothesis."""
 
 from __future__ import annotations
 
 import argparse
 import hashlib
 import importlib.util
+import os
 import sys
 from pathlib import Path
 
@@ -14,6 +15,13 @@ import run_adaptive_ptsem_real_study as runner
 from scan_expanded_candidates_moment import HYPOTHESES, SEASONS
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
+
+
+def atomic_csv(frame: pd.DataFrame, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + f".tmp-{os.getpid()}")
+    frame.to_csv(temporary, index=False)
+    os.replace(temporary, path)
 
 
 def sha256(path: Path) -> str:
@@ -52,7 +60,7 @@ def main() -> None:
         "--workspace", type=Path, default=Path.cwd()
     )
     parser.add_argument(
-        "--core", type=Path, default=REPO_ROOT / "experiments/simulation/legacy/d.py"
+        "--core", type=Path, default=REPO_ROOT / "src/nba_core.py"
     )
     parser.add_argument(
         "--outputs-dir",
@@ -134,7 +142,7 @@ def main() -> None:
             }
         )
     detail = pd.DataFrame(rows)
-    detail.to_csv(outputs / args.hypothesis / "evaluation.csv", index=False)
+    atomic_csv(detail, outputs / args.hypothesis / "evaluation.csv")
     summary = {
         "hypothesis": args.hypothesis,
         "n_seasons": len(selected_seasons),
@@ -152,9 +160,7 @@ def main() -> None:
         "exact_count": int(detail["exact"].sum()),
         "total_runtime_sec": float(detail["runtime_sec"].sum()),
     }
-    pd.DataFrame([summary]).to_csv(
-        outputs / args.hypothesis / "summary.csv", index=False
-    )
+    atomic_csv(pd.DataFrame([summary]), outputs / args.hypothesis / "summary.csv")
     print(pd.DataFrame([summary]).to_string(index=False), flush=True)
 
 
