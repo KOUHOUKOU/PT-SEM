@@ -43,6 +43,17 @@ mpl.rcParams.update({
 })
 
 
+def setup_figure6_style() -> None:
+    mpl.rcParams.update({
+        "font.size": 9.8,
+        "axes.titlesize": 11.5,
+        "axes.labelsize": 10.3,
+        "xtick.labelsize": 9.0,
+        "ytick.labelsize": 9.2,
+        "legend.fontsize": 9.0,
+    })
+
+
 def save_both(fig: plt.Figure, stem: str, roots: tuple[Path, ...] | None = None) -> None:
     if roots is None:
         if FINAL is None:
@@ -97,6 +108,7 @@ def make_figure5(output_roots: tuple[Path, ...] | None = None) -> None:
 def make_figure6(output_roots: tuple[Path, ...] | None = None) -> None:
     if RESULTS is None:
         raise RuntimeError("configure_run_root() must be called first")
+    setup_figure6_style()
     coef = pd.read_csv(RESULTS / "nba_coefficients_by_season.csv")
     family = pd.read_csv(RESULTS / "nba_working_families_by_season.csv")
     if tuple(coef["season"].drop_duplicates()) != SEASONS:
@@ -137,10 +149,10 @@ def make_figure6(output_roots: tuple[Path, ...] | None = None) -> None:
             linewidth=1.45, markersize=4.3, markerfacecolor="white",
             markeredgewidth=1.0, **styles[edge],
         )
-    ax.set_title("(a) Thinning coefficients", loc="left", pad=8, fontsize=11.2)
-    ax.set_ylabel("Estimated thinning coefficient", fontsize=10.6)
+    ax.set_title("(a) Thinning coefficients", loc="left", pad=8, fontsize=12.0)
+    ax.set_ylabel("Estimated thinning coefficient", fontsize=11.5)
     ax.set_xticks(x, SEASONS, rotation=42, ha="right")
-    ax.tick_params(axis="both", labelsize=8.8)
+    ax.tick_params(axis="both", labelsize=9.5)
     ax.set_xlim(-0.35, len(SEASONS) - 0.65)
     finite_coefficients = wide.to_numpy(float)
     finite_coefficients = finite_coefficients[np.isfinite(finite_coefficients)]
@@ -157,7 +169,7 @@ def make_figure6(output_roots: tuple[Path, ...] | None = None) -> None:
     ax.legend(
         loc="upper center", bbox_to_anchor=(0.5, -0.22), ncol=2, frameon=False,
         columnspacing=1.25, handlelength=2.5, borderaxespad=0.15,
-        fontsize=9.0, handletextpad=0.5, labelspacing=0.5,
+        fontsize=9.7, handletextpad=0.5, labelspacing=0.5,
     )
 
     family_order = ("Poisson", "NB", "ZIP", "Geom", "Binomial", "Bernoulli")
@@ -196,13 +208,13 @@ def make_figure6(output_roots: tuple[Path, ...] | None = None) -> None:
         for j, season in enumerate(SEASONS):
             fam = fwide.loc[node, season]
             hx.text(j, i, short[fam], ha="center", va="center",
-                    fontsize=7.5, color="#111111")
+                    fontsize=8.2, color="#111111")
     legend = [
         Patch(facecolor=colors[f], edgecolor="#666666", linewidth=0.4,
               label=short[f]) for f in family_order
     ]
     hx.legend(
-        handles=legend, title="Exogenous family", title_fontsize=8.2,
+        handles=legend, title="Exogenous family", title_fontsize=9.0,
         loc="upper center", bbox_to_anchor=(0.5, -0.25),
         ncol=6, frameon=False, handlelength=1.25, columnspacing=0.9,
     )

@@ -49,7 +49,7 @@ TITLES = {
 XLABELS = {
     "dimension": "Number of nodes $d$",
     "sample_size": "Sample size $N$",
-    "average_in_degree": "Average indegree",
+    "average_in_degree": "Average in-degree",
 }
 
 
@@ -66,12 +66,12 @@ def setup_style() -> None:
     plt.rcParams.update(
         {
             "font.family": "DejaVu Sans",
-            "font.size": 9,
-            "axes.titlesize": 9.5,
-            "axes.labelsize": 9,
-            "legend.fontsize": 8,
-            "xtick.labelsize": 8,
-            "ytick.labelsize": 8,
+            "font.size": 11,
+            "axes.titlesize": 12.5,
+            "axes.labelsize": 12,
+            "legend.fontsize": 10.5,
+            "xtick.labelsize": 11,
+            "ytick.labelsize": 11,
             "axes.linewidth": 0.8,
             "pdf.fonttype": 42,
             "ps.fonttype": 42,
@@ -83,7 +83,6 @@ def configure_axis(axis: plt.Axes, sweep: str, values: np.ndarray) -> None:
     axis.grid(True, color="#D9D9D9", linestyle="--", linewidth=0.45, alpha=0.30)
     axis.set_axisbelow(True)
     axis.set_ylim(0.0, 1.02)
-    axis.set_xlabel(XLABELS[sweep])
     if sweep == "sample_size":
         axis.set_xscale("log")
         axis.set_xticks((100, 1000, 10000))
@@ -119,9 +118,8 @@ def main() -> None:
     if summary["R_success"].ne(required_R).any() or summary["mean_F1"].isna().any():
         raise RuntimeError("Refusing to plot incomplete summary cells")
     setup_style()
-    fig, axes = plt.subplots(2, 3, figsize=(11.4, 6.25), sharey=False)
+    fig, axes = plt.subplots(2, 3, figsize=(11.8, 5.85), sharey=False)
     handles: dict[str, object] = {}
-    letters = iter("abcdef")
     for row, regime in enumerate(("restricted", "extended")):
         allowed = METHOD_ORDER if regime == "restricted" else METHOD_ORDER[:5]
         for column, sweep in enumerate(SWEEPS):
@@ -156,7 +154,10 @@ def main() -> None:
                     zorder=1,
                 )
                 handles[method] = line
-            axis.set_title(f"({next(letters)}) {TITLES[sweep]}")
+            if row == 0:
+                axis.set_title(f"({chr(ord('a') + column)}) {TITLES[sweep]}")
+            else:
+                axis.set_xlabel(XLABELS[sweep])
             if column == 0:
                 axis.set_ylabel(
                     ("Restricted" if regime == "restricted" else "Extended")
@@ -170,17 +171,24 @@ def main() -> None:
         loc="lower center",
         ncol=7,
         frameon=False,
-        bbox_to_anchor=(0.5, 0.008),
+        bbox_to_anchor=(0.5, 0.018),
     )
-    fig.tight_layout(rect=(0, 0.08, 1, 1))
+    fig.subplots_adjust(
+        left=0.075,
+        right=0.985,
+        top=0.93,
+        bottom=0.175,
+        wspace=0.23,
+        hspace=0.20,
+    )
     OUT.mkdir(parents=True, exist_ok=True)
     PLOTDATA.mkdir(parents=True, exist_ok=True)
     plotdata_path = PLOTDATA / f"{STEM}_plotdata.csv"
     summary.to_csv(plotdata_path, index=False)
     pdf = OUT / f"{STEM}.pdf"
     png = OUT / f"{STEM}.png"
-    fig.savefig(pdf, bbox_inches="tight")
-    fig.savefig(png, dpi=400, bbox_inches="tight")
+    fig.savefig(pdf)
+    fig.savefig(png, dpi=400)
     plt.close(fig)
     metadata = {
         "figure": 4,
