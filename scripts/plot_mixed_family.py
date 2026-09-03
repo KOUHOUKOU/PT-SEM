@@ -148,19 +148,21 @@ def figure3(summary: pd.DataFrame) -> None:
     families = tuple(CONFIG["family_library"])
     fig, axes = plt.subplots(1, 3, figsize=(11.8, 3.6), gridspec_kw={"width_ratios": [1.25, 1, 1]})
     axis = axes[0]
+    extended_colors = {"LibraryDP": "#AD2B57", "LibraryGreedy": "#C38700"}
     for method in ("LibraryDP", "LibraryGreedy"):
         for regime, line_style in (("restricted", "-"), ("extended", (0, (5.0, 3.5)))):
             curve = accuracy.loc[(accuracy["method"] == method) & (accuracy["regime"] == regime)].sort_values("sweep_value")
             x = curve["sweep_value"].to_numpy(float)
             style = STYLE[method]
+            line_color = style["color"] if regime == "restricted" else extended_colors[method]
             label = f"{CONFIG['display_names'][method]} - {regime}"
-            axis.plot(x, curve["mean"], color=style["color"], marker=style["marker"], linestyle=line_style, linewidth=2, markersize=4.2, label=label)
+            axis.plot(x, curve["mean"], color=line_color, marker=style["marker"], linestyle=line_style, linewidth=2, markersize=4.2, label=label)
             axis.fill_between(x, curve["ci95_low"], curve["ci95_high"], color=style["color"], alpha=.10, linewidth=0)
     axis.set_ylim(0, 1.02)
     axis.set_xlabel("Sample size $N$")
     axis.set_ylabel("Family-selection accuracy")
     configure_axis(axis, "sample_size")
-    axis.legend(frameon=False, fontsize=7, ncol=2, loc="upper center", bbox_to_anchor=(.5, -.30), borderaxespad=0)
+    axis.legend(frameon=False, fontsize=7, ncol=2, loc="upper center", bbox_to_anchor=(.5, -.30), borderaxespad=0, handlelength=3.2)
     image = None
     for axis, regime in zip(axes[1:], ("restricted", "extended")):
         matrix = confusion.loc[confusion["regime"] == regime].pivot(index="true_family", columns="selected_family", values="row_proportion").reindex(index=families, columns=families).fillna(0).to_numpy(float)
