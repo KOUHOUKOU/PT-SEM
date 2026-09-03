@@ -149,7 +149,7 @@ def figure3(summary: pd.DataFrame) -> None:
     fig, axes = plt.subplots(1, 3, figsize=(11.8, 3.6), gridspec_kw={"width_ratios": [1.25, 1, 1]})
     axis = axes[0]
     for method in ("LibraryDP", "LibraryGreedy"):
-        for regime, line_style in (("restricted", "-"), ("extended", "--")):
+        for regime, line_style in (("restricted", "-"), ("extended", (0, (5.0, 3.5)))):
             curve = accuracy.loc[(accuracy["method"] == method) & (accuracy["regime"] == regime)].sort_values("sweep_value")
             x = curve["sweep_value"].to_numpy(float)
             style = STYLE[method]
